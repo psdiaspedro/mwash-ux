@@ -1,0 +1,12 @@
+.mdc-card {
+    position: fixed;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .mat-mdc-card-title {
+        font-family: Museo;
+    }
+
+}

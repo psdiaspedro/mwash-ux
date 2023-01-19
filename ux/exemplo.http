@@ -1,0 +1,29 @@
+GET http://localhost:3000/events
+
+####
+
+GET http://localhost:3000/events/1
+
+####
+
+POST http://localhost:3000/events HTTP/1.1
+content-type: application/json
+
+{
+    "start": "2023-01-17T12:15:30.000Z",
+    "title": "Evento teste"
+}
+
+####
+
+PUT http://localhost:3000/events/3 HTTP/1.1
+content-type: application/json
+
+{
+    "start": "2023-01-19T12:15:30.000Z",
+    "title": "Evento teste"
+}
+
+####
+
+DELETE http://localhost:3000/events/2

@@ -1,0 +1,109 @@
+<nav>
+    <mat-button-toggle-group
+    name="fontStyle" 
+    aria-label="Font Style">
+        <mat-button-toggle
+        mwlCalendarPreviousView
+        value="bold"
+        [(viewDate)]="viewDate"
+        [view]="viewMode"
+        >
+            <mat-icon>
+                arrow_back
+            </mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle
+        mwlCalendarToday 
+        [(viewDate)]="viewDate" 
+        value="italic"
+        >
+            <mat-icon>
+                calendar_today
+            </mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle
+        mwlCalendarNextView
+        [(viewDate)]="viewDate"
+        [view]="viewMode"
+        >
+            <mat-icon>
+                arrow_forward
+            </mat-icon>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <span>
+        {{ viewDate | calendarDate:(viewMode + 'ViewTitle') }}
+    </span>
+
+    <mat-button-toggle-group 
+    name="fontStyle" 
+    aria-label="Font Style" 
+    [(ngModel)]="viewButton">
+        <mat-button-toggle 
+        [value]="calendarView.Month" 
+        (click)="setView(calendarView.Month)">
+            <mat-icon>
+                calendar_view_month
+            </mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle 
+        [value]="calendarView.Week" 
+        (click)="setView(calendarView.Week)">
+            <mat-icon>
+                calendar_view_week
+            </mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle 
+        [value]="calendarView.Day" 
+        (click)="setView(calendarView.Day)">
+            <mat-icon>
+                calendar_view_day
+            </mat-icon>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+</nav>
+
+<main [ngSwitch]="viewMode">
+    <mwl-calendar-month-view
+    *ngSwitchCase="calendarView.Month"
+    [viewDate]="viewDate" 
+    [events]="events"
+    (eventClicked)="openSchedule($event.event)"
+    >
+    </mwl-calendar-month-view>
+
+    <mwl-calendar-week-view
+    *ngSwitchCase="calendarView.Week"
+    [viewDate]="viewDate"
+    [events]="events"
+    [dayStartHour]="9"
+    [dayEndHour]="16"
+    (eventClicked)="openSchedule($event.event)"
+    >
+    </mwl-calendar-week-view>
+
+    <mwl-calendar-day-view
+    *ngSwitchCase="calendarView.Day"
+    [viewDate]="viewDate"
+    [events]="events"
+    (eventClicked)="openSchedule($event.event)"
+    [dayStartHour]="9"
+    [dayEndHour]="16"
+    >
+    </mwl-calendar-day-view>
+</main>
+<mat-button-toggle-group 
+    name="fontStyle" 
+    aria-label="Font Style">
+    <mat-button-toggle mwlCalendarToday 
+    [(viewDate)]="viewDate" 
+    value="italic"
+    (click)="onSubmit()">
+        <mat-icon>
+            calendar_today
+        </mat-icon>
+    </mat-button-toggle>
+</mat-button-toggle-group>
+
+<!-- [refresh]="refresh" -->
