@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { trackByHourSegment } from 'angular-calendar/modules/common/util/util';
 import { take } from 'rxjs';
+import { AuthService } from '../auth.service';
 
 @Component({
     selector: 'app-login',
@@ -19,11 +21,13 @@ export class LoginComponent implements OnInit {
     private readonly API = "http://localhost:5000"
 
     constructor(
-        private http: HttpClient
+        private router: Router,
+        private http: HttpClient,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
-
+        if (this.authService.authenticated) this.redirect()
     }
 
     public onLogin() {
@@ -34,10 +38,12 @@ export class LoginComponent implements OnInit {
 
         this.login()
             .subscribe(
-                response => {
-                    console.log(typeof response)
+                (response: any) => {
+                    this.createSession(response.id, response.nome,response.token)
+                    this.redirect()
                 }
             )
+        // console.log(this.authService.decodeToken)
     }
 
     private login() {
@@ -47,4 +53,15 @@ export class LoginComponent implements OnInit {
             }})
             .pipe(take(1))
     }
+
+    private createSession(userID: string, userName: string, accessToken: string) {
+        localStorage.setItem("userID", userID)
+        localStorage.setItem("userName", userName)
+        localStorage.setItem("accessToken", accessToken)
+    }
+
+    private redirect() {
+        this.router.navigateByUrl("/home")
+    }
+
 }

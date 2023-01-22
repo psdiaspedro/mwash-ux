@@ -1,0 +1,21 @@
+table {
+    tr {
+        &:not(:last-of-type, :nth-child(10)) {
+            td {
+                &:first-of-type {
+                    font-weight: bold;
+                    padding-right: 12px;
+                }
+            }
+        }
+    }
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+h1 {
+    text-align: center;
+}

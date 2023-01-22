@@ -1,3 +1,72 @@
 <h1 mat-dialog-title>
-    Teste
+    {{data.diaAgendamento}}
 </h1>
+<main mat-dialog-content>
+    <table>
+        <tr>
+            <td>Cliente</td>
+            <td>{{data.nome}}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{data.email}}</td>
+        </tr>
+        <tr>
+            <td>Contato</td>
+            <td>{{data.contato}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Endereço</td>
+            <td>{{fullAddress}}</td>
+        </tr>
+        <tr>
+            <td>Checkin</td>
+            <td>{{checkin}}</td>
+        </tr>
+        <tr>
+            <td>Checkout</td>
+            <td>{{data.checkout}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">Observações sobre o agendamento</td>
+        </tr>
+        <tr>
+            <td colspan="2">{{data.obs}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">Detalhes da propriedade</td>
+        </tr>
+        <tr>
+            <td colspan="2">{{data.obsPropriedade}}</td>
+        </tr>
+    </table>
+</main>
+<footer mat-dialog-actions>
+    <button mat-raised-button (click)="deleteEvent()" color="accent">
+        <mat-icon>
+            delete
+        </mat-icon>
+            &nbsp;Apagar
+    </button>
+    <button mat-raised-button (click)="editEvent()" color="primary">
+        <mat-icon>
+            edit_calendar
+        </mat-icon>
+            &nbsp;Editar
+    </button>
+    <button mat-raised-button (click)="dialogService.closeSchedulingDialog()">
+        <mat-icon>
+            reply
+        </mat-icon>
+            &nbsp;Voltar
+    </button>
+</footer>

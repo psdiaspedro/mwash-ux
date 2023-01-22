@@ -1,6 +1,6 @@
-<h1 mat-dialog-title>Novo Agendamento</h1>
+<h1 mat-dialog-title>Editar Agendamento</h1>
 <main mat-dialog-content>
-    <form [formGroup]="createEventForm">
+    <form [formGroup]="editorForm">
         <mat-form-field appearance="fill">
             <mat-label>Data</mat-label>
             <input 
@@ -8,13 +8,13 @@
             formControlName="diaAgendamento"
             [matDatepicker]="picker"
             readonly
-            >
+            >  
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
         <!-- <mat-form-field appearance="fill">
             <mat-label>Propriedade</mat-label>
-            <mat-select formControlName="propriedadeID">
+            <mat-select formControlName="propriedadeId">
                 <mat-option *ngFor="let propriedade of propriedades" [value]="propriedade.id">
                     {{propriedade.numero}}
                 </mat-option>
@@ -26,7 +26,6 @@
             matInput 
             formControlName="checkout"
             mask="00:00"
-            [dropSpecialCharacters]="false"
             placeholder="Horario do checkout HH:mm"
             >
         </mat-form-field>
@@ -36,7 +35,6 @@
             matInput 
             formControlName="checkin"
             mask="00:00"
-            [dropSpecialCharacters]="false"
             placeholder="Horario do checkin HH:mm"
             >
         </mat-form-field>
@@ -47,16 +45,19 @@
     </form>
 </main>
 <footer mat-dialog-actions>
-    <button mat-raised-button color="primary" (click)="createEvent()">
+    <button mat-raised-button color="primary" (click)="getFormValue()">
         <mat-icon>
             save
         </mat-icon>
-            &nbsp;Cadastrar
+            &nbsp;Editar
     </button>
-    <button mat-raised-button (click)="dialogService.closeSchedulerDialog()">
+    <button mat-raised-button (click)="dialogService.closeEditorDialog()">
         <mat-icon>
             reply
         </mat-icon>
             &nbsp;Voltar
     </button>
 </footer>
+
+<!-- [dropSpecialCharacters]="false"
+[dropSpecialCharacters]="false" -->

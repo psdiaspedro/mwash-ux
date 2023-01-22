@@ -7,6 +7,7 @@
         value="bold"
         [(viewDate)]="viewDate"
         [view]="viewMode"
+        (click)="checkCurrentMonth()"
         >
             <mat-icon>
                 arrow_back
@@ -25,6 +26,7 @@
         mwlCalendarNextView
         [(viewDate)]="viewDate"
         [view]="viewMode"
+        (click)="checkCurrentMonth()"
         >
             <mat-icon>
                 arrow_forward
@@ -70,6 +72,7 @@
     [viewDate]="viewDate" 
     [events]="events"
     (eventClicked)="openSchedule($event.event)"
+    (dayClicked)="dayClicked($event.day)"
     >
     </mwl-calendar-month-view>
 
@@ -80,6 +83,7 @@
     [dayStartHour]="9"
     [dayEndHour]="16"
     (eventClicked)="openSchedule($event.event)"
+    [refresh]="homeService._refreshNeeded$"
     >
     </mwl-calendar-week-view>
 
@@ -93,17 +97,20 @@
     >
     </mwl-calendar-day-view>
 </main>
-<mat-button-toggle-group 
-    name="fontStyle" 
-    aria-label="Font Style">
-    <mat-button-toggle mwlCalendarToday 
-    [(viewDate)]="viewDate" 
-    value="italic"
-    (click)="onSubmit()">
-        <mat-icon>
-            calendar_today
-        </mat-icon>
-    </mat-button-toggle>
-</mat-button-toggle-group>
-
-<!-- [refresh]="refresh" -->
+<footer>
+    <!-- <mat-button-toggle-group 
+        name="fontStyle" 
+        aria-label="Font Style">
+        <mat-button-toggle mwlCalendarToday 
+        [(viewDate)]="viewDate" 
+        value="italic"
+        (click)="onSubmit()">
+            <mat-icon>
+                calendar_today
+            </mat-icon>
+        </mat-button-toggle>
+    </mat-button-toggle-group> -->
+    <div>
+        Adicinar Agendamento
+    </div>
+</footer>

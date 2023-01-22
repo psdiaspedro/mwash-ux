@@ -9,6 +9,7 @@ import { registerLocaleData } from '@angular/common';
 import ptBr from '@angular/common/locales/pt';
 import { HomeModule } from './home/home.module';
 import { HttpClientModule } from '@angular/common/http';
+import { CalendarModule, DatePickerModule, TimePickerModule, DateRangePickerModule, DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
 
 
 registerLocaleData(ptBr)
@@ -23,6 +24,7 @@ registerLocaleData(ptBr)
     BrowserAnimationsModule,
     HttpClientModule,
     HomeModule,
+    CalendarModule, DatePickerModule, TimePickerModule, DateRangePickerModule, DateTimePickerModule,
   ],
   providers: [ //services que vao ficar disponiveis para os declarations
     { provide: LOCALE_ID, useValue: 'pt' }

@@ -12,7 +12,7 @@
           "skipImport": true
         },
         "@schematics/angular:service": {
-            "skipTests": true
+          "skipTests": true
         }
       },
       "root": "",
@@ -23,7 +23,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
-                "moment"
+              "moment"
             ],
             "outputPath": "dist/ux",
             "index": "src/index.html",
@@ -40,7 +40,8 @@
             "styles": [
               "node_modules/angular-calendar/css/angular-calendar.css",
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "./node_modules/@syncfusion/ej2-material-theme/styles/material.css"
             ],
             "scripts": []
           },
@@ -105,7 +106,8 @@
             "styles": [
               "node_modules/angular-calendar/css/angular-calendar.css",
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "./node_modules/@syncfusion/ej2-material-theme/styles/material.css"
             ],
             "scripts": []
           }

@@ -8,8 +8,16 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from 'moment';
 import { MaterialModule } from '../material.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchedulingComponent } from './scheduling/scheduling.component';
+import { EditorComponent } from './editor/editor.component';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SchedulerComponent } from './scheduler/scheduler.component';
+
 export function momentAdapterFactory() {
     return adapterFactory(moment);
   };
@@ -17,19 +25,28 @@ export function momentAdapterFactory() {
 
 @NgModule({
     declarations: [
-        HomeComponent,
         CalendarComponent,
         ToolbarComponent,
-        SchedulingComponent
+        SchedulingComponent,
+        EditorComponent,
+        SchedulerComponent,
+        HomeComponent
     ],
     imports: [
         CommonModule,
         CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory }),
         MaterialModule,
-        FormsModule
+        FormsModule,
+        ReactiveFormsModule,
+        NgxMaskDirective,
+        NgxMaterialTimepickerModule,
+        MatDialogModule
+    ],
+    providers: [
+        provideNgxMask()
     ],
     exports: [
-        HomeComponent
+        HomeComponent,
     ]
 })
 export class HomeModule { }
