@@ -22,35 +22,37 @@ export class CalendarComponent implements OnInit {
     events: CalendarEvent[] = []
     viewButton = this.viewMode
     startDate: Date = new Date();
-
-    //monthData: Array<number> = []
-    //sideEvents: CalendarEvent[] = []
+    snack: any;
 
     constructor(
         private dialogService: DialogService,
         public homeService: HomeService,
-        private dialog: MatDialog,
         public auth: AuthService
     ) {
 
     }
 
     ngOnInit() {
-        if (this.auth.authenticated) {
-            this.auth.checkToken()
+        if (!this.auth.authenticated) {
+            this.auth.logout()
+            return
         }
-        this.homeService._refreshNeeded$
+        this.auth.checkToken()
+        this.homeService._refreshNeeded$ //isso só acontece quando da um refresh
             .subscribe(() =>{
-                this.getAllEvents(),
-                take(1)
+                if(this.auth.isAdmin) {
+                    this.getAllEvents(),
+                    take(1)
+                } else {
+                    this.getMyEvents(),
+                    take(1)
+                }
             })
-        this.getAllEvents()
-    }
-
-    onSubmit() {
-        this.homeService.createEvent().subscribe(response => {
-            console.log(response)
-        })
+        if(this.auth.isAdmin) {
+            this.getAllEvents()
+        } else {
+            this.getMyEvents()
+        }
     }
 
     private getAllEvents() {
@@ -60,14 +62,30 @@ export class CalendarComponent implements OnInit {
         //if(this.monthData.includes(this.viewDate.getMonth() + 1)) return 
 
         this.homeService.getAllEvents(ano, mes) //tratar erro
-        .subscribe((events: Array<CalendarEvent>) => {
-            //this.sideEvents = this.events
-            //this.events = []
-            //this.events.push(...this.sideEvents)
-            //this.events.push(...events)
-            //this.monthData.push(this.viewDate.getMonth() + 1);
-            this.events = events
-        })
+            .subscribe( {
+                next: (events: Array<CalendarEvent>) => {
+                    this.events = events
+                },
+                error: (error => {
+                    this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
+                })
+            })
+            
+    }
+
+    private getMyEvents() {
+        const ano = this.viewDate.getFullYear()
+        const mes = (this.viewDate.getMonth() + 1).toString().padStart(2, "0")
+
+        this.homeService.getMyEvents(ano, mes)
+            .subscribe( {
+                    next: (events: Array<CalendarEvent>) => {
+                        this.events = events
+                    },
+                    error: (error => {
+                        this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
+                    })
+            })
     }
 
     public setView(viewMode: CalendarView) {
@@ -75,7 +93,6 @@ export class CalendarComponent implements OnInit {
     }
 
     public openSchedule(event: CalendarEvent) {
-        //this.dialog.open(SchedulingComponent, {data: event.meta})
         this.dialogService.openSchedulingDialog(event.meta)
     }
 
@@ -84,16 +101,12 @@ export class CalendarComponent implements OnInit {
             return   
         }
 
-        // if (this.startDate.getFullYear() == this.viewDate.getFullYear()) {
-        //     console.log(this.viewDate.getMonth() + 1)
-        // } else {
-        //     console.log(this.viewDate.getFullYear())
-        //     console.log(this.monthData)
-        //     this.monthData = this.monthData.filter(month => month !== this.viewDate.getMonth() + 1)
-        //     console.log(this.monthData)
-        // }
+        if(this.auth.isAdmin) {
+            this.getAllEvents()
+        } else {
+            this.getMyEvents()
+        }
 
-        this.getAllEvents()
         this.startDate = this.viewDate
     }
 

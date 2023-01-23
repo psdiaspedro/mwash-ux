@@ -17,6 +17,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SchedulerComponent } from './scheduler/scheduler.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 export function momentAdapterFactory() {
     return adapterFactory(moment);
@@ -30,6 +31,7 @@ export function momentAdapterFactory() {
         SchedulingComponent,
         EditorComponent,
         SchedulerComponent,
+        ConfirmationComponent,
         HomeComponent
     ],
     imports: [

@@ -5,6 +5,7 @@ import { Agendamento } from "./agendamento"
 import * as moment from 'moment';
 import { HomeService } from '../home.service';
 import { DialogService } from '../dialog.service';
+import { SnackService } from '../snack.service';
 
 @Component({
   selector: 'app-editor',
@@ -24,6 +25,7 @@ export class EditorComponent {
     private payload: Agendamento = {}
     
     constructor(
+        private snack: SnackService,
         public homeService: HomeService,
         public dialogService: DialogService,
         @Inject(MAT_DIALOG_DATA) public data: any
@@ -34,8 +36,7 @@ export class EditorComponent {
         if(!this.isEmpty(this.payload)) {
             this.editEvent()
         } else {
-            console.log("não editou nada, não faz a call")
-            //dar retorno pro usuário
+            this.snack.openWarningSnack("Campos vazios, nenhuma alteração foi feita")
         }
     }
 
@@ -52,10 +53,12 @@ export class EditorComponent {
 
     private toTimeFormat() {
         if (this.editorForm.value.checkin) {
-            this.payload.checkin = `${this.editorForm.value.checkin.slice(0, 2)}:${this.editorForm.value.checkin.slice(2)}`
+            console.log(this.editorForm.value.checkin)
+            this.payload.checkin = this.editorForm.value.checkin
         }
         if (this.editorForm.value.checkout) {
-            this.payload.checkout = `${this.editorForm.value.checkout.slice(0, 2)}:${this.editorForm.value.checkout.slice(2)}`
+            console.log(this.editorForm.value.checkout)
+            this.payload.checkout = this.editorForm.value.checkout
         }
     }
 
@@ -73,11 +76,12 @@ export class EditorComponent {
         this.homeService.editEvent(this.data.agendamentoId, this.payload)
             .subscribe({
                 next: (response) => {
+                    this.snack.openWarningSnack("Agendamento editado com sucesso")
                     this.dialogService.closeEditorDialog()
                     this.dialogService.closeSchedulingDialog()
                 },
                 error: (error) => {
-                    console.log(error)
+                    this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
                 }
             })
     }

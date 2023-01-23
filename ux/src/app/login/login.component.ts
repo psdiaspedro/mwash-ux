@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { trackByHourSegment } from 'angular-calendar/modules/common/util/util';
-import { take } from 'rxjs';
+import { catchError, EMPTY, take, throwError } from 'rxjs';
 import { AuthService } from '../auth.service';
+import { SnackService } from '../home/snack.service';
 
 @Component({
     selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
     private readonly API = "http://localhost:5000"
 
     constructor(
+        private snack: SnackService,
         private router: Router,
         private http: HttpClient,
         private authService: AuthService
@@ -37,12 +39,20 @@ export class LoginComponent implements OnInit {
         if (!this.loginForm.valid) return
 
         this.login()
-            .subscribe(
-                (response: any) => {
-                    this.createSession(response.id, response.nome,response.token)
+            .subscribe({
+                next: (response: any) => {
+                    this.createSession(response.id, response.nome, response.token)
                     this.redirect()
+                },
+                error: (error) => {
+                    if (error.status === 0) {
+                        this.snack.openErrorSnack("Não foi possível se conectar com a API")
+                    }
+                    if (error.status === 401) {
+                        this.snack.openErrorSnack("Dados inválidos, tente novamente")
+                    }
                 }
-            )
+            })
         // console.log(this.authService.decodeToken)
     }
 
@@ -50,8 +60,13 @@ export class LoginComponent implements OnInit {
         return this.http.post(`${this.API}/login`, this.loginForm.value, {
             headers: {
                 "content-type": "application/json"
-            }})
-            .pipe(take(1))
+            }
+        })
+            .pipe(
+                catchError(error => {
+                    return throwError(() => error)
+                }),
+                take(1))
     }
 
     private createSession(userID: string, userName: string, accessToken: string) {

@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { DialogService } from '../dialog.service';
 import { EditorComponent } from '../editor/editor.component';
 import { HomeService } from '../home.service';
+import { SnackService } from '../snack.service';
 
 @Component({
     selector: 'app-scheduling',
@@ -18,6 +19,7 @@ export class SchedulingComponent implements OnInit {
     public checkout: string = ""
 
     constructor(
+        private snack: SnackService,
         public homeService: HomeService,
         public dialogService: DialogService,
         @Inject(MAT_DIALOG_DATA) public data: any
@@ -42,24 +44,20 @@ export class SchedulingComponent implements OnInit {
     }
 
     public deleteEvent() {
-        //adicionar pop de confimação
-        this.homeService.deleteEvent(this.data.agendamentoId).subscribe({
-            next: (response) => {
-                this.dialogService.closeSchedulingDialog()
-            },
-            error: (error) => {
-                console.log(error)
-            }
-        })
+        this.dialogService.openConfirmationDialog(this.data)
+        
+        // this.homeService.deleteEvent(this.data.agendamentoId).subscribe({
+        //     next: (response) => {
+        //         this.snack.openWarningSnack("Agendamento excluido com sucesso")
+        //         this.dialogService.closeSchedulingDialog()
+        //     },
+        //     error: (error) => {
+        //         this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
+        //     }
+        // })
     }
 
     public editEvent() {
         this.dialogService.openEditorDialog(this.data)
     }
 }
-
-// .subscribe({
-//     next: (v) => console.log(v),
-//     error: (e) => console.error(e),
-//     complete: () => console.info('complete') 
-// })

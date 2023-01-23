@@ -19,13 +19,13 @@ $md-primary: (
     A400 : #4679ff,
     A700 : #2c67ff,
     contrast: (50 : #000000,
-    100 : #000000,
-    200 : #000000,
-    300 : #ffffff,
-    400 : #ffffff,
-    500 : #ffffff,
-    600 : #ffffff,
-    700 : #ffffff,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
         800 : #ffffff,
         900 : #ffffff,
         A100 : #000000,
@@ -50,8 +50,7 @@ $md-accent: (
     A200 : #ffcccc,
     A400 : #ff999a,
     A700 : #ff8080,
-    contrast: (
-        50 : #000000,
+    contrast: (50 : #000000,
         100 : #000000,
         200 : #000000,
         300 : #000000,
@@ -71,12 +70,10 @@ $md-accent: (
 $my-primary: mat.define-palette($md-primary);
 $my-accent: mat.define-palette($md-accent);
 
-$my-theme: mat.define-light-theme((
- color: (
-   primary: $my-primary,
-   accent: $my-accent,
- ),
-));
+$my-theme: mat.define-light-theme((color: (primary: $my-primary,
+                accent: $my-accent,
+            ),
+        ));
 
 @include mat.all-component-themes($my-theme);
 
@@ -90,7 +87,8 @@ $my-theme: mat.define-light-theme((
     --color-primary: #0059a9;
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -134,7 +132,7 @@ body {
     }
 
     .cal-day-cell {
-        
+
         &.cal-today {
             background-color: lighten(#0059a9, 50) !important;
         }
@@ -170,3 +168,61 @@ body {
 .cdk-overlay-backdrop-showing {
     backdrop-filter: blur(10px);
 }
+
+// .mat-mdc-snack-bar-container {
+//     --mat-mdc-snack-bar-button-color: var(--color-primary);
+//     --mdc-snackbar-container-color: var(--color-accent);
+//     --mdc-snackbar-supporting-text-color: rgba(255, 255, 255, 0.87);
+//     --mdc-snackbar-supporting-text-font: Roboto, sans-serif;
+//     --mdc-snackbar-supporting-text-line-height: 20px;
+//     --mdc-snackbar-supporting-text-size: 18px;
+//     --mdc-snackbar-supporting-text-weight: 400;
+// }
+
+.error-snackbar {
+    max-width: max-content !important;
+    --mdc-snackbar-container-color: #e93336;
+    --mdc-snackbar-supporting-text-weight: 450;
+    --mdc-snackbar-supporting-text-size: 16px;
+    
+    text-align: center !important;
+}
+
+.warning-snackbar {
+    max-width: max-content !important;
+    --mdc-snackbar-container-color: var(--color-primary);
+    --mdc-snackbar-supporting-text-weight: 450;
+    --mdc-snackbar-supporting-text-size: 16px;
+    
+    text-align: center !important;
+}
+
+
+// .success-snackbar {
+//     color: white;
+//     --mdc-snackbar-container-color: var(--success-color);
+
+//     .mat-simple-snackbar-action {
+//         color: white;
+//     }
+// }
+
+
+// .light-success-snackbar {
+//     color: #155724;
+//     --mdc-snackbar-container-color: #d4edda;
+
+//     .mat-simple-snackbar-action {
+//         color: darkgreen;
+//     }
+// }
+
+// .light-error-snackbar {
+//     color: #721c24;
+//     --mdc-snackbar-container-color: #f8d7da;
+//     border-color: #f5c6cb;
+
+//     .mat-simple-snackbar-action {
+//         color: darkred;
+//     }
+// }

@@ -26,6 +26,7 @@
             matInput 
             formControlName="checkout"
             mask="00:00"
+            [dropSpecialCharacters]="false"
             placeholder="Horario do checkout HH:mm"
             >
         </mat-form-field>
@@ -35,6 +36,7 @@
             matInput 
             formControlName="checkin"
             mask="00:00"
+            [dropSpecialCharacters]="false"
             placeholder="Horario do checkin HH:mm"
             >
         </mat-form-field>

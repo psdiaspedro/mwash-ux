@@ -1,0 +1,17 @@
+h1 {
+    text-align: center;
+}
+
+main {
+    min-width: 400px;
+
+    .mat-mdc-form-field {
+        display: block;
+    }
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+}
+

@@ -12,14 +12,21 @@
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <!-- <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill">
             <mat-label>Propriedade</mat-label>
-            <mat-select formControlName="propriedadeID">
-                <mat-option *ngFor="let propriedade of propriedades" [value]="propriedade.id">
-                    {{propriedade.numero}}
+            <input 
+            type="text"
+            placeholder="Selectione uma propriedade"
+            matInput
+            formControlName="propriedadeID"
+            [matAutocomplete]="auto"
+            >
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+                <mat-option *ngFor="let propriety of filteredOptions | async" [value]="propriety">
+                    {{ propriety.enderecoCompleto }}
                 </mat-option>
-            </mat-select>
-        </mat-form-field> -->
+            </mat-autocomplete>
+        </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Checkout</mat-label>
             <input 
@@ -47,7 +54,7 @@
     </form>
 </main>
 <footer mat-dialog-actions>
-    <button mat-raised-button color="primary" (click)="createEvent()">
+    <button mat-raised-button color="primary" (click)="onCreate()">
         <mat-icon>
             save
         </mat-icon>
