@@ -89,7 +89,6 @@ export class HomeService {
         }).pipe(
             map((events: any) => {
                 if (events) {
-                    console.log(events)
                     return events.map((event: Property) => {
                         event["enderecoCompleto"] = `${event.logadouro} ${event.numero} ${event.complemento ? ', ' + event.complemento: ''}`;
                         return event

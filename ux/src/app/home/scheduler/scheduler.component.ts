@@ -8,6 +8,7 @@ import { Agendamento } from './agendamento';
 import { Property } from "../property"
 import { map, Observable, startWith } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
+import { SnackService } from '../snack.service';
 
 @Component({
     selector: 'app-scheduler',
@@ -40,6 +41,7 @@ export class SchedulerComponent implements OnInit {
 
 
     constructor(
+        private snack: SnackService,
         public auth: AuthService,
         public homeService: HomeService,
         public dialogService: DialogService,
@@ -71,7 +73,7 @@ export class SchedulerComponent implements OnInit {
         this.formatTime()
         this.formatDate()
         if(!this.createEventForm.valid) {
-            console.log("NÀO TA VALIDO PARCEIRO")
+            this.snack.openErrorSnack("Campos obrigatórios não preenchidos")
             return
         } 
 
@@ -130,9 +132,12 @@ export class SchedulerComponent implements OnInit {
             .subscribe({
                 next: (response) => {
                     this.dialogService.closeSchedulerDialog()
+                    this.snack.openWarningSnack("Agendamento criado com sucesso")
                 },
                 error: (error) => {
                     console.log(error)
+                    console.log(this.payload)
+                    this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
                 }
             })
     }
