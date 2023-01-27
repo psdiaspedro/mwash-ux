@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NgControlStatus, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, NgControlStatus, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { DialogService } from '../dialog.service';
@@ -20,7 +20,7 @@ export class SchedulerComponent implements OnInit {
     public createEventForm = new FormGroup({
         diaAgendamento: new FormControl("", Validators.required),
         propriedadeID: new FormControl(null, Validators.required),
-        checkout: new FormControl(null, Validators.required),
+        checkout: new FormControl(null, Validators.required), //setar data limite por auqi
         checkin: new FormControl(),
         obs: new FormControl(),
     })
@@ -46,22 +46,35 @@ export class SchedulerComponent implements OnInit {
         public homeService: HomeService,
         public dialogService: DialogService,
         @Inject(MAT_DIALOG_DATA) public data: any
-    ) { }   
+    ) { }
 
     ngOnInit(): void {
-        if(this.auth.isAdmin) {
+        if (this.auth.isAdmin) {
             this.getAllProperties()
         } else {
             this.getMyProperties()
         }
         this.filteredOptions = this.createEventForm.controls["propriedadeID"].valueChanges
-        .pipe(
-            startWith(""),
-            map((value: any) => {
-                const address = typeof value == "string" ? value : value.enderecoCompleto
-                return address ? this._filter(address as string) : this.properties.slice()
-            })
-        )
+            .pipe(
+                startWith(""),
+                map((value: any) => {
+                    const address = typeof value == "string" ? value : value.enderecoCompleto
+                    return address ? this._filter(address as string) : this.properties.slice()
+                })
+            )
+    }
+
+    private checkTimeLimit(): boolean {
+        const diaAgendamento = this.createEventForm.value.diaAgendamento;
+        const date = moment(diaAgendamento, "ddd MMM DD YYYY HH:mm:ss ZZ")
+        const tomorrow = moment().add(1, 'days')
+        const today = moment()
+        const limit = moment().set({ hour: 17, minute: 0, second: 0 });
+
+        if (date.isSame(tomorrow, 'day') && today.isAfter(limit)) {
+            return true;
+        }
+        return false;
     }
 
     private _filter(value: string): Property[] {
@@ -69,19 +82,24 @@ export class SchedulerComponent implements OnInit {
         return this.properties.filter(property => property.enderecoCompleto.toLowerCase().includes(filterValue));
     }
 
-    public onCreate() { 
+    public onCreate() {
         this.formatTime()
         this.formatDate()
-        if(!this.createEventForm.valid) {
+        if (!this.createEventForm.valid) {
             this.snack.openErrorSnack("Campos obrigatórios não preenchidos")
             return
-        } 
+        }
+        
+        if (this.checkTimeLimit()) {
+            this.snack.openTimeErrorSnack("O horário limite de agendamentos para o dia seguinte é 17h00, para emergencias favor contatar a administração")
+            return
+        }
 
         if (this.createEventForm.value.propriedadeID) {
             this.property = this.createEventForm.value.propriedadeID
             this.payload.propriedadeId = this.property.id
         }
-        
+
         if (this.createEventForm.value.obs) {
             this.payload.obs = this.createEventForm.value.obs
         }
@@ -106,11 +124,11 @@ export class SchedulerComponent implements OnInit {
 
     private getMyProperties() {
         this.homeService.getMyProperties()
-        .subscribe(
-            (properties: any) => {
-                this.properties = properties
-            }
-        )
+            .subscribe(
+                (properties: any) => {
+                    this.properties = properties
+                }
+            )
     }
 
     private getAllProperties() {

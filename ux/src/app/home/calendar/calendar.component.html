@@ -17,6 +17,7 @@
         mwlCalendarToday 
         [(viewDate)]="viewDate" 
         value="italic"
+        (click)="checkCurrentMonth()"
         >
             <mat-icon>
                 calendar_today
@@ -83,7 +84,10 @@
     [dayStartHour]="9"
     [dayEndHour]="16"
     (eventClicked)="openSchedule($event.event)"
-    [refresh]="homeService._refreshNeeded$"
+    [refresh]="homeService._refreshNeeded$" 
+    [minimumEventHeight] = 2
+    [hourSegments] = 2
+    [hourSegmentHeight] = 70
     >
     </mwl-calendar-week-view>
 
@@ -94,6 +98,8 @@
     (eventClicked)="openSchedule($event.event)"
     [dayStartHour]="9"
     [dayEndHour]="16"
+    [hourSegments]= 2
+    [hourSegmentHeight]= 50
     >
     </mwl-calendar-day-view>
 </main>

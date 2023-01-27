@@ -1,9 +1,17 @@
 <mat-toolbar color="primary">
-    <button 
-    mat-button routerLink="/create"
+    <!-- <button 
+    mat-button
     (click)="onCreateEvent()"
     >
         Adicionar Agendamento
+    </button> -->
+    <button
+    mat-icon-button
+    title="logout"
+    (click)="auth.logout()"
+    >
+        <mat-icon>
+            logout
+        </mat-icon>
     </button>
-    <!-- <button mat-button routerLink="/create">Logout</button> -->
 </mat-toolbar>

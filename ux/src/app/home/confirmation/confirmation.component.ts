@@ -36,6 +36,4 @@ export class ConfirmationComponent {
         this.dialogService.closeConfirmationDialog()
         this.dialogService.closeSchedulingDialog()
     }
-
-    
 }

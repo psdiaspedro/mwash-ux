@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DialogService } from './dialog.service';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +9,10 @@ import { Component } from '@angular/core';
 export class HomeComponent {
 
     constructor(
-
+        private dialogService: DialogService
     ) {}
+
+    public onCreateEvent() {
+        this.dialogService.openSchedulerDialog()
+    }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DialogService } from '../dialog.service';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
     selector: 'app-toolbar',
@@ -9,10 +9,7 @@ import { DialogService } from '../dialog.service';
 export class ToolbarComponent {
     
     constructor(
-        private dialogService: DialogService,
+        public auth: AuthService
     ){}
 
-    public onCreateEvent() {
-        this.dialogService.openSchedulerDialog()
-    }
 }

@@ -8,8 +8,7 @@ export class SnackService {
 
 
     private errorSnackRef: any
-    // private schedulinDialogRef:  any
-    // private schedulerDialogRef:  any
+    private warningSnackRef:  any
 
     constructor(
         private _snackBar: MatSnackBar
@@ -25,7 +24,7 @@ export class SnackService {
     }
 
     public openWarningSnack(message: string, action?: any) {
-        this.errorSnackRef = this._snackBar.open(message, action, {
+        this.warningSnackRef = this._snackBar.open(message, action, {
             duration: 2000,
             horizontalPosition: "center",
             verticalPosition: "bottom",
@@ -33,7 +32,12 @@ export class SnackService {
         })
     }
 
-    public closeSnackLogin() {
-        this.errorSnackRef.close()
+    public openTimeErrorSnack(message: string, action?: any) {
+        this.errorSnackRef = this._snackBar.open(message, action, {
+            duration: 10000,
+            horizontalPosition: "center",
+            verticalPosition: "bottom",
+            panelClass: "error-snackbar"
+        })
     }
 }

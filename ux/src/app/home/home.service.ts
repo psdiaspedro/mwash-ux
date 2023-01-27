@@ -21,7 +21,6 @@ export class HomeService {
         private http: HttpClient,
         private authService: AuthService
     ) {
-
     }
     
     get refreshNeeded$() {
@@ -37,15 +36,19 @@ export class HomeService {
         return convertedDay
     }
 
-    public getAllEvents(ano: number, mes: string) {
-        return this.http.get<Array<Event>>(`${this.API}/agendamentos/${ano}-${mes}`, {
+    public getAllEvents(year: number, month: string) {
+        return this.http.get<Array<Event>>(`${this.API}/agendamentos/${year}-${month}`, {
             headers: this.authService.defaultHeaders
         }).pipe(
             map((events: any) => {
                 if (events) {
                     return events.map((event: Event) => {
+                        let icon = ""
+                        if (event.obs) {
+                            icon = "&#x26A0;&#xFE0F;"
+                        }
                         return {
-                            title: `${event.logadouro} ${event.numero} ${event.complemento || ""}`,
+                            title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
                             start: this.convertDate(event.diaAgendamento, event.checkout),
                             end: event.checkin == "00:00:00" ? null : this.convertDate(event.diaAgendamento, event.checkin),
                             meta: event
@@ -60,15 +63,19 @@ export class HomeService {
         )
     }
 
-    public getMyEvents(ano: number, mes: string) {
-        return this.http.get<Array<Event>>(`${this.API}/agendamentos/usuario/${ano}-${mes}`, {
+    public getMyEvents(year: number, month: string) {
+        return this.http.get<Array<Event>>(`${this.API}/agendamentos/usuario/${year}-${month}`, {
             headers: this.authService.defaultHeaders
         }).pipe(
             map((events: any) => {
                 if (events) {
                     return events.map((event: Event) => {
+                        let icon = ""
+                        if (event.obs) {
+                            icon = "<mat-icon>add</mat-icon>"
+                        }
                         return {
-                            title: `${event.logadouro} ${event.numero} ${event.complemento || ""}`,
+                            title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
                             start: this.convertDate(event.diaAgendamento, event.checkout),
                             end: event.checkin == "00:00:00" ? null : this.convertDate(event.diaAgendamento, event.checkin),
                             meta: event

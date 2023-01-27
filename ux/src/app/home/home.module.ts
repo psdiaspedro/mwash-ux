@@ -18,11 +18,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SchedulerComponent } from './scheduler/scheduler.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { HttpClientModule } from '@angular/common/http';
 
 export function momentAdapterFactory() {
     return adapterFactory(moment);
-  };
-  
+}
 
 @NgModule({
     declarations: [
@@ -42,7 +42,8 @@ export function momentAdapterFactory() {
         ReactiveFormsModule,
         NgxMaskDirective,
         NgxMaterialTimepickerModule,
-        MatDialogModule
+        MatDialogModule,
+        HttpClientModule
     ],
     providers: [
         provideNgxMask()

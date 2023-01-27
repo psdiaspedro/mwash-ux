@@ -45,16 +45,6 @@ export class SchedulingComponent implements OnInit {
 
     public deleteEvent() {
         this.dialogService.openConfirmationDialog(this.data)
-        
-        // this.homeService.deleteEvent(this.data.agendamentoId).subscribe({
-        //     next: (response) => {
-        //         this.snack.openWarningSnack("Agendamento excluido com sucesso")
-        //         this.dialogService.closeSchedulingDialog()
-        //     },
-        //     error: (error) => {
-        //         this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
-        //     }
-        // })
     }
 
     public editEvent() {
