@@ -99,11 +99,11 @@ body {
 
 .cal-week-view {
 
-    .cal-event {
-        background-color: #0059a9;
-        border-color: unset;
-        color: #fff;
-    }
+    // .cal-event {
+    //     background-color: #0059a9;
+    //     border-color: unset;
+    //     color: #fff;
+    // }
 
     .cal-header {
 
@@ -125,11 +125,11 @@ body {
         background-color: var(--color-accent);
     }
 
-    .cal-event {
-        background-color: #0059a9;
-        border-color: unset;
-        color: #fff;
-    }
+    // .cal-event {
+    //     background-color: #0059a9;
+    //     border-color: unset;
+    //     color: #fff;
+    // }
 
     .cal-day-cell {
 
@@ -185,4 +185,28 @@ body {
     --mdc-snackbar-supporting-text-size: 16px;
     
     text-align: center !important;
+}
+
+.cal-day-badge {
+    background-color: var(--color-accent);
+    color: white !important;
+}
+
+.cal-day-badge {
+    margin-top: 18px;
+    margin-left: 10px;
+    display: block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 10px;
+    float: right;
+}
+
+.cal-past {
+    background-color: #f2f2f2;
 }

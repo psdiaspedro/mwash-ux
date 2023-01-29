@@ -1,11 +1,17 @@
 
 import { Component, OnInit } from '@angular/core';
-import { CalendarEvent, CalendarView } from 'angular-calendar';
+import { CalendarEvent, CalendarMonthViewDay, CalendarView, CalendarWeekViewBeforeRenderEvent, DateAdapter } from 'angular-calendar';
 import { first, forkJoin, last, Observable, take } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 import { DialogService } from '../dialog.service';
 import { HomeService } from '../home.service';
 import * as moment from 'moment';
+import { SnackService } from '../snack.service';
+import { WeekDay } from '@angular/common';
+import { MatMonthView } from '@angular/material/datepicker';
+import {getEventsInPeriod} from 'calendar-utils';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {startOfDay, endOfDay} from 'date-fns';
 
 
 @Component({
@@ -20,14 +26,18 @@ export class CalendarComponent implements OnInit {
     viewDate: Date = new Date();
     events: CalendarEvent[] = []
     viewButton = this.viewMode
-    snack: any;
+    refresh: boolean = false
+
+    totalEventsToday: number = 0
 
     private currentMonth: Date = new Date()
 
     constructor(
+        private snack: SnackService,
         private dialogService: DialogService,
         public homeService: HomeService,
-        public auth: AuthService
+        public auth: AuthService,
+        private modal: NgbModal, private dateAdapter: DateAdapter
     ) {}
 
     ngOnInit() {
@@ -38,6 +48,7 @@ export class CalendarComponent implements OnInit {
         this.auth.checkToken()
         this.homeService._refreshNeeded$ //isso só acontece quando da um refresh
             .subscribe(() =>{
+                this.refresh = true
                 this.checkCurrentMonth()
             })
         this.checkCurrentMonth()
@@ -62,7 +73,7 @@ export class CalendarComponent implements OnInit {
             }
         } else {
             const sameMonth = moment(this.viewDate).isSame(moment(this.currentMonth), "month")
-            if (sameMonth) {
+            if (sameMonth && !this.refresh) {
                 return
             }
             const year = moment(this.viewDate).year()
@@ -70,6 +81,7 @@ export class CalendarComponent implements OnInit {
             this.getEvents(year, month)
         }
         this.currentMonth = this.viewDate
+        this.refresh = false
     }
 
     private getEvents(firstYear: number, firstMonth: string, secondYear?: number, secondMonth?: string) {
@@ -95,10 +107,11 @@ export class CalendarComponent implements OnInit {
         this.homeService.getAllEvents(ano, mes)
             .subscribe( {
                 next: (events: Array<CalendarEvent>) => {
+                    console.log(events)
                     this.events = events
                 },
                 error: (error => {
-                    this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
+                    this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
                 })
             })
     }
@@ -110,10 +123,9 @@ export class CalendarComponent implements OnInit {
         ]).subscribe({
             next: res => {
                 this.events = this.mergeEvents(res[0], res[1])
-                console.log(this.events)
             },
             error: error => {
-                this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
+                this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
             }
         })
     }
@@ -128,7 +140,7 @@ export class CalendarComponent implements OnInit {
                         this.events = events
                     },
                     error: (error => {
-                        this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
+                        this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
                     })
             })
     }
@@ -143,7 +155,7 @@ export class CalendarComponent implements OnInit {
                 console.log(this.events)
             },
             error: error => {
-                this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
+                this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
             }
         })
     }
@@ -165,5 +177,16 @@ export class CalendarComponent implements OnInit {
         this.viewDate = date
         this.viewMode = CalendarView.Day
         this.viewButton = this.viewMode
+    }
+
+    addHeaderDays(event: CalendarWeekViewBeforeRenderEvent) {
+        event.header = event.header.map((column: any) => {
+          column['events'] = getEventsInPeriod(this.dateAdapter, {
+            events: this.events,
+            periodStart: startOfDay(column.date),
+            periodEnd: endOfDay(column.date)
+          })
+          return column;
+        })
     }
 }   

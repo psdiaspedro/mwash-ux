@@ -12,13 +12,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchedulingComponent } from './scheduling/scheduling.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SchedulerComponent } from './scheduler/scheduler.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 export function momentAdapterFactory() {
     return adapterFactory(moment);
@@ -41,9 +41,9 @@ export function momentAdapterFactory() {
         FormsModule,
         ReactiveFormsModule,
         NgxMaskDirective,
-        NgxMaterialTimepickerModule,
         MatDialogModule,
-        HttpClientModule
+        HttpClientModule,
+        NgbModalModule
     ],
     providers: [
         provideNgxMask()

@@ -67,18 +67,124 @@
     </mat-button-toggle-group>
 </nav>
 
+<ng-template
+#cellMonthTemplate
+let-day="day"
+let-openDay="openDay"
+let-locale="locale"
+let-tooltipPlacement="tooltipPlacement"
+let-highlightDay="highlightDay"
+let-unhighlightDay="unhighlightDay"
+let-eventClicked="eventClicked"
+let-tooltipTemplate="tooltipTemplate"
+let-tooltipAppendToBody="tooltipAppendToBody"
+let-tooltipDelay="tooltipDelay"
+let-trackByEventId="trackByEventId"
+let-validateDrag="validateDrag"
+>
+    <div
+    class="cal-cell-top"
+    [attr.aria-label]="{ day: day, locale: locale } | calendarA11y : 'monthCell'"
+    >
+        <span aria-hidden="true">
+            <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">
+                {{day.badgeTotal}}
+            </span>
+            <span class="cal-day-number">
+                {{day.date | calendarDate : 'monthViewDayNumber' : locale}}
+            </span>
+        </span>
+    </div>
+    <div class="cal-events" *ngIf="day.events.length > 0">
+        <div
+        class="cal-event"
+        *ngFor="let event of day.events; trackBy: trackByEventId"
+        [ngStyle]="{ backgroundColor: event.color?.primary }"
+        [ngClass]="event?.cssClass"
+        (mouseenter)="highlightDay.emit({ event: event })"
+        (mouseleave)="unhighlightDay.emit({ event: event })"
+        [mwlCalendarTooltip]="
+        event.title | calendarEventTitle : 'monthTooltip' : event
+        "
+        [tooltipPlacement]="tooltipPlacement"
+        [tooltipEvent]="event"
+        [tooltipTemplate]="tooltipTemplate"
+        [tooltipAppendToBody]="tooltipAppendToBody"
+        [tooltipDelay]="tooltipDelay"
+        mwlDraggable
+        [class.cal-draggable]="event.draggable"
+        dragActiveClass="cal-drag-active"
+        [dropData]="{ event: event, draggedFrom: day }"
+        [dragAxis]="{ x: event.draggable, y: event.draggable }"
+        [validateDrag]="validateDrag"
+        [touchStartLongPress]="{ delay: 300, delta: 30 }"
+        (mwlClick)="eventClicked.emit({ event: event, sourceEvent: $event })"
+        [attr.aria-hidden]="{} | calendarA11y : 'hideMonthCellEvents'"
+        >
+        </div>
+    </div>
+</ng-template>
+
+<ng-template
+#weekHeaderTemplate
+let-days="days"
+let-locale="locale"
+let-dayHeaderClicked="dayHeaderClicked"
+let-eventDropped="eventDropped"
+let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate"
+let-dragEnter="dragEnter"
+>
+    <div class="cal-day-headers" role="row">
+        <div
+        class="cal-header"
+        *ngFor="let day of days; trackBy: trackByWeekDayHeaderDate"
+        [class.cal-past]="day.isPast"
+        [class.cal-today]="day.isToday"
+        [class.cal-future]="day.isFuture"
+        [class.cal-weekend]="day.isWeekend"
+        [ngClass]="day.cssClass"
+        (mwlClick)="dayHeaderClicked.emit({ day: day, sourceEvent: $event })"
+        mwlDroppable
+        dragOverClass="cal-drag-over"
+        (drop)="eventDropped.emit({event: $event.dropData.event, newStart: day.date})"
+        (dragEnter)="dragEnter.emit({ date: day.date })"
+        tabindex="0"
+        role="columnheader"
+        >
+            <div>
+                <div badge badge-danger class="cal-day-badge">
+                    {{ day['events'].length }}
+                </div>
+                <div>
+                    <b>
+                        {{ day.date | calendarDate : 'weekViewColumnHeader' : locale }}
+                    </b><br/>
+                    <span>
+                        {{day.date | calendarDate : 'weekViewColumnSubHeader' : locale}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+
 <main [ngSwitch]="viewMode">
     <mwl-calendar-month-view
     *ngSwitchCase="calendarView.Month"
     [viewDate]="viewDate" 
     [events]="events"
+    [refresh]="homeService._refreshNeeded$" 
     (eventClicked)="openSchedule($event.event)"
     (dayClicked)="dayClicked($event.day)"
+    [cellTemplate]="cellMonthTemplate"
     >
     </mwl-calendar-month-view>
 
     <mwl-calendar-week-view
     *ngSwitchCase="calendarView.Week"
+    (beforeViewRender)="addHeaderDays($event)"
     [viewDate]="viewDate"
     [events]="events"
     [dayStartHour]="9"
@@ -88,6 +194,7 @@
     [minimumEventHeight] = 2
     [hourSegments] = 2
     [hourSegmentHeight] = 70
+    [headerTemplate]="weekHeaderTemplate"
     >
     </mwl-calendar-week-view>
 
@@ -96,10 +203,15 @@
     [viewDate]="viewDate"
     [events]="events"
     (eventClicked)="openSchedule($event.event)"
+    [refresh]="homeService._refreshNeeded$" 
     [dayStartHour]="9"
     [dayEndHour]="16"
-    [hourSegments]= 2
-    [hourSegmentHeight]= 50
+    [hourSegments]= 1
+    [hourSegmentHeight]= 100
+    [eventSnapSize] = 10
+    [minimumEventHeight]=10
     >
     </mwl-calendar-day-view>
 </main>
+
+<!-- <div class="badge badge-danger">{{ day['events'].length }}</div> -->

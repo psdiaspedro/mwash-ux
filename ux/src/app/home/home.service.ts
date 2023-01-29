@@ -51,6 +51,7 @@ export class HomeService {
                             title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
                             start: this.convertDate(event.diaAgendamento, event.checkout),
                             end: event.checkin == "00:00:00" ? null : this.convertDate(event.diaAgendamento, event.checkin),
+                            color: this.getColor(event.color),
                             meta: event
                         }
                     })
@@ -170,4 +171,16 @@ export class HomeService {
             take(1)
         )
     }
+
+    private getColor(color: any) {
+        return {
+            primary: "#0000fa", //borda
+            secondary: "#00ff00", //background
+            secondaryText: "#000000" //texto
+        }
+    }
 }
+
+// primary: string;
+// secondary: string;   
+// secondaryText?: string;

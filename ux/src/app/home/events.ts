@@ -6,7 +6,9 @@ export interface Event {
     checkin: string
     checkout: string
     cidade: string
-    complemento?: string
+    complemento?: string,
+    color: number,
+    senha: string
     contato: string
     diaAgendamento: string
     email: string
