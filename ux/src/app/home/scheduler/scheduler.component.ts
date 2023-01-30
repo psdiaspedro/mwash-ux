@@ -20,7 +20,7 @@ export class SchedulerComponent implements OnInit {
     public createEventForm = new FormGroup({
         diaAgendamento: new FormControl("", Validators.required),
         propriedadeID: new FormControl(null, Validators.required),
-        checkout: new FormControl(null, Validators.required), //setar data limite por auqi
+        checkout: new FormControl(null, Validators.required),
         checkin: new FormControl(),
         obs: new FormControl(),
     })
@@ -83,6 +83,8 @@ export class SchedulerComponent implements OnInit {
     }
 
     public onCreate() {
+        this.createEventForm.get("checkout")?.markAllAsTouched()
+        this.createEventForm.get("propriedadeID")?.markAllAsTouched()
         this.formatTime()
         this.formatDate()
         if (!this.createEventForm.valid) {
@@ -103,7 +105,7 @@ export class SchedulerComponent implements OnInit {
         if (this.createEventForm.value.obs) {
             this.payload.obs = this.createEventForm.value.obs
         }
-
+        console.log(this.payload)
         this.createEvent()
     }
 

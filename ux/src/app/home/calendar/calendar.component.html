@@ -168,8 +168,6 @@ let-dragEnter="dragEnter"
     </div>
 </ng-template>
 
-
-
 <main [ngSwitch]="viewMode">
     <mwl-calendar-month-view
     *ngSwitchCase="calendarView.Month"
@@ -192,8 +190,8 @@ let-dragEnter="dragEnter"
     (eventClicked)="openSchedule($event.event)"
     [refresh]="homeService._refreshNeeded$" 
     [minimumEventHeight] = 2
-    [hourSegments] = 2
-    [hourSegmentHeight] = 70
+    [hourSegments] = 1
+    [hourSegmentHeight] = 90
     [headerTemplate]="weekHeaderTemplate"
     >
     </mwl-calendar-week-view>
@@ -207,9 +205,7 @@ let-dragEnter="dragEnter"
     [dayStartHour]="9"
     [dayEndHour]="16"
     [hourSegments]= 1
-    [hourSegmentHeight]= 100
-    [eventSnapSize] = 10
-    [minimumEventHeight]=10
+    [hourSegmentHeight]= 95
     >
     </mwl-calendar-day-view>
 </main>

@@ -78,7 +78,6 @@ export class HomeService {
                         return {
                             title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
                             start: this.convertDate(event.diaAgendamento, event.checkout),
-                            end: event.checkin == "00:00:00" ? null : this.convertDate(event.diaAgendamento, event.checkin),
                             meta: event
                         }
                     })
