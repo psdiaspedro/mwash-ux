@@ -1,6 +1,6 @@
 table {
     tr {
-        &:not(:last-of-type, :nth-child(10)) {
+        &:not(:last-of-type, :nth-child(13)) {
             td {
                 &:first-of-type {
                     font-weight: bold;

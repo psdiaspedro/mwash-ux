@@ -189,7 +189,7 @@ let-dragEnter="dragEnter"
     [dayEndHour]="16"
     (eventClicked)="openSchedule($event.event)"
     [refresh]="homeService._refreshNeeded$" 
-    [minimumEventHeight] = 2
+    [minimumEventHeight] = 30
     [hourSegments] = 1
     [hourSegmentHeight] = 90
     [headerTemplate]="weekHeaderTemplate"
@@ -209,5 +209,3 @@ let-dragEnter="dragEnter"
     >
     </mwl-calendar-day-view>
 </main>
-
-<!-- <div class="badge badge-danger">{{ day['events'].length }}</div> -->

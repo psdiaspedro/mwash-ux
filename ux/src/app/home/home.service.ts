@@ -51,7 +51,7 @@ export class HomeService {
                             title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
                             start: this.convertDate(event.diaAgendamento, event.checkout),
                             end: event.checkin == "00:00:00" ? null : this.convertDate(event.diaAgendamento, event.checkin),
-                            color: this.getColor(event.color),
+                            color: this.getColor(event.cor),
                             meta: event
                         }
                     })
@@ -172,10 +172,59 @@ export class HomeService {
     }
 
     private getColor(color: any) {
+
+        if (color >= 1 && color <= 99) {
+            return {
+                primary: "#ffd300", //borda
+                secondary: "#ffd300", //background
+                secondaryText: "#ffffff" //texto
+            }
+        }
+
+        if (color >= 100 && color <= 199) {
+            return {
+                primary: "#2e8b57", //borda
+                secondary: "#2e8b57", //background
+                secondaryText: "#ffffff" //texto
+            }
+        }
+
+        if (color >= 200 && color <= 299) {
+            return {
+                primary: "#ff4040", //borda
+                secondary: "#ff4040", //background
+                secondaryText: "#ffffff" //texto
+            }
+        }
+
+        if (color >= 300 && color <= 399) {
+            return {
+                primary: "#002395", //borda
+                secondary: "#002395", //background
+                secondaryText: "#ffffff" //texto
+            }
+        }
+
+        if (color >= 400 && color <= 499) {
+            return {
+                primary: "#2e8b57", //borda
+                secondary: "#2e8b57", //background
+                secondaryText: "#ffffff" //texto
+            }
+        }
+
+        if (color >= 500 && color <= 599) {
+            return {
+                primary: "#2e8b57", //borda
+                secondary: "#2e8b57", //background
+                secondaryText: "#ffffff" //texto
+            }
+        }
+
         return {
-            primary: "#0000fa", //borda
-            secondary: "#00ff00", //background
-            secondaryText: "#000000" //texto
+            primary: "#2e8b57", //borda
+            secondary: "#2e8b57", //background
+            secondaryText: "#ffffff" //texto
         }
     }
 }
@@ -183,3 +232,10 @@ export class HomeService {
 // primary: string;
 // secondary: string;   
 // secondaryText?: string;
+
+// 1 - 99 -> Centro - AMARELO - #ffdf00
+// 100 - 199 -> Zona Leste
+// 200 - 299 -> ZOna Sul
+// 300 - 399 -> Zona Oeste
+// 400 - 499 -> Zona Norte
+// 500 - 599 -> ZOna Oeste

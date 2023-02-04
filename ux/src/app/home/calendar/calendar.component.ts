@@ -107,7 +107,6 @@ export class CalendarComponent implements OnInit {
         this.homeService.getAllEvents(ano, mes)
             .subscribe( {
                 next: (events: Array<CalendarEvent>) => {
-                    console.log(events)
                     this.events = events
                 },
                 error: (error => {

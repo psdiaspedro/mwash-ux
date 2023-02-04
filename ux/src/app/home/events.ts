@@ -7,7 +7,7 @@ export interface Event {
     checkout: string
     cidade: string
     complemento?: string,
-    color: number,
+    cor: number,
     senha: string
     contato: string
     diaAgendamento: string

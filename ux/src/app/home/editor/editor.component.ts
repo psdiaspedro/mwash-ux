@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Agendamento } from "./agendamento"
@@ -6,6 +6,9 @@ import * as moment from 'moment';
 import { HomeService } from '../home.service';
 import { DialogService } from '../dialog.service';
 import { SnackService } from '../snack.service';
+import { map, Observable, startWith } from 'rxjs';
+import { Property } from "../property"
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-editor',
@@ -23,8 +26,12 @@ export class EditorComponent {
     })
 
     private payload: Agendamento = {}
+
+    public properties: Array<Property> = []
+    public filteredOptions: Observable<any> = new Observable()
     
     constructor(
+        public auth: AuthService,
         private snack: SnackService,
         public homeService: HomeService,
         public dialogService: DialogService,
@@ -33,6 +40,10 @@ export class EditorComponent {
 
     public getFormValue() {
         this.getPayload()
+        if (this.checkTimeLimit()) {
+            this.snack.openTimeErrorSnack("O horário limite de agendamentos para o dia seguinte é 17h00, para emergencias favor contatar a administração")
+            return
+        }
         if(!this.isEmpty(this.payload)) {
             this.editEvent()
         } else {
@@ -84,5 +95,18 @@ export class EditorComponent {
                     this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
                 }
             })
+    }
+
+    private checkTimeLimit(): boolean {
+        const diaAgendamento = this.editorForm.value.diaAgendamento;
+        const date = moment(diaAgendamento, "ddd MMM DD YYYY HH:mm:ss ZZ")
+        const tomorrow = moment().add(1, 'days')
+        const today = moment()
+        const limit = moment().set({ hour: 17, minute: 0, second: 0 });
+
+        if (date.isSame(tomorrow, 'day') && today.isAfter(limit)) {
+            return true;
+        }
+        return false;
     }
 }
