@@ -31,9 +31,9 @@ export class SchedulingComponent implements OnInit {
         this.fullAddress = `${this.data.logadouro} ${this.data.numero}, ${this.data.complemento || ""}, ${this.data.bairro}` //ver isso aqui
 
         if(this.data.checkin == "00:00:00") {
-            this.checkin = "N/A"
+            this.checkin = "&#10060;"
         } else {
-            this.checkin = this.data.checkin
+            this.checkin = "&#9989;"
         }
     }
 

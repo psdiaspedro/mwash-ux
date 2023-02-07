@@ -23,12 +23,12 @@
             <td>{{fullAddress}}</td>
         </tr>
         <tr>
-            <td>Checkin</td>
-            <td>{{checkin}}</td>
-        </tr>
-        <tr>
             <td>Checkout</td>
             <td>{{data.checkout}}</td>
+        </tr>
+        <tr>
+            <td>Checkin</td>
+            <td [innerHTML]="checkin"></td>
         </tr>
         <tr>
             <td>Senha da Porta</td>

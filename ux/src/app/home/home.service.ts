@@ -50,7 +50,6 @@ export class HomeService {
                         return {
                             title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
                             start: this.convertDate(event.diaAgendamento, event.checkout),
-                            end: event.checkin == "00:00:00" ? null : this.convertDate(event.diaAgendamento, event.checkin),
                             color: this.getColor(event.cor),
                             meta: event
                         }
@@ -177,7 +176,7 @@ export class HomeService {
             return {
                 primary: "#ffd300", //borda
                 secondary: "#ffd300", //background
-                secondaryText: "#ffffff" //texto
+                secondaryText: "#000000" //texto
             }
         }
 
@@ -185,7 +184,7 @@ export class HomeService {
             return {
                 primary: "#2e8b57", //borda
                 secondary: "#2e8b57", //background
-                secondaryText: "#ffffff" //texto
+                secondaryText: "#000000" //texto
             }
         }
 
@@ -193,7 +192,7 @@ export class HomeService {
             return {
                 primary: "#ff4040", //borda
                 secondary: "#ff4040", //background
-                secondaryText: "#ffffff" //texto
+                secondaryText: "#000000" //texto
             }
         }
 
@@ -201,7 +200,7 @@ export class HomeService {
             return {
                 primary: "#002395", //borda
                 secondary: "#002395", //background
-                secondaryText: "#ffffff" //texto
+                secondaryText: "#000000" //texto
             }
         }
 
@@ -209,7 +208,7 @@ export class HomeService {
             return {
                 primary: "#2e8b57", //borda
                 secondary: "#2e8b57", //background
-                secondaryText: "#ffffff" //texto
+                secondaryText: "#000000" //texto
             }
         }
 
@@ -217,14 +216,14 @@ export class HomeService {
             return {
                 primary: "#2e8b57", //borda
                 secondary: "#2e8b57", //background
-                secondaryText: "#ffffff" //texto
+                secondaryText: "#000000" //texto
             }
         }
 
         return {
             primary: "#2e8b57", //borda
             secondary: "#2e8b57", //background
-            secondaryText: "#ffffff" //texto
+            secondaryText: "#000000" //texto
         }
     }
 }

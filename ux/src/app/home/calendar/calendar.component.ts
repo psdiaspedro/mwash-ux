@@ -11,7 +11,8 @@ import { WeekDay } from '@angular/common';
 import { MatMonthView } from '@angular/material/datepicker';
 import {getEventsInPeriod} from 'calendar-utils';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {startOfDay, endOfDay} from 'date-fns';
+import {startOfDay, endOfDay, daysInWeek} from 'date-fns';
+import { HostListener } from '@angular/core'
 
 
 @Component({
@@ -22,13 +23,15 @@ import {startOfDay, endOfDay} from 'date-fns';
 export class CalendarComponent implements OnInit {
 
     calendarView = CalendarView;
-    viewMode: CalendarView = CalendarView.Week
+    viewMode: CalendarView = window.innerWidth <= 768 ? CalendarView.Day : CalendarView.Week 
     viewDate: Date = new Date();
     events: CalendarEvent[] = []
     viewButton = this.viewMode
     refresh: boolean = false
 
     totalEventsToday: number = 0
+
+    hideButton = false
 
     private currentMonth: Date = new Date()
 
@@ -45,6 +48,7 @@ export class CalendarComponent implements OnInit {
             this.auth.logout()
             return
         }
+        this.resize()
         this.auth.checkToken()
         this.homeService._refreshNeeded$ //isso só acontece quando da um refresh
             .subscribe(() =>{
@@ -52,6 +56,16 @@ export class CalendarComponent implements OnInit {
                 this.checkCurrentMonth()
             })
         this.checkCurrentMonth()
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event: any) {
+        this.resize()
+    }
+
+    resize() {
+        this.hideButton = window.innerWidth <= 768 ? true : false
+        this.viewMode = window.innerWidth <= 768 ? CalendarView.Day : CalendarView.Week
     }
 
     public checkCurrentMonth() {

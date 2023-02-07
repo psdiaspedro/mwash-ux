@@ -42,7 +42,9 @@
     <mat-button-toggle-group 
     name="fontStyle" 
     aria-label="Font Style" 
-    [(ngModel)]="viewButton">
+    [(ngModel)]="viewButton"
+    *ngIf="!hideButton"
+    >
         <mat-button-toggle 
         [value]="calendarView.Month" 
         (click)="setView(calendarView.Month)">
