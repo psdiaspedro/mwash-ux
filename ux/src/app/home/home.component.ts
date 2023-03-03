@@ -15,4 +15,8 @@ export class HomeComponent {
     public onCreateEvent() {
         this.dialogService.openSchedulerDialog()
     }
+
+    public onReport() {
+        this.dialogService.openReportDialog()
+    }
 }

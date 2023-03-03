@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { EditorComponent } from './editor/editor.component';
+import { ReportComponent } from './report/report.component';
 import { SchedulerComponent } from './scheduler/scheduler.component';
 import { SchedulingComponent } from './scheduling/scheduling.component';
 
@@ -14,6 +15,7 @@ export class DialogService {
     private schedulinDialogRef:  any
     private schedulerDialogRef:  any
     private confirmationDialogRef:  any
+    private reportDialogRef:  any
 
     constructor(
         private dialog: MatDialog,
@@ -35,6 +37,10 @@ export class DialogService {
         this.confirmationDialogRef = this.dialog.open(ConfirmationComponent, { data })
     }
 
+    public openReportDialog(data?: any) {
+        this.reportDialogRef = this.dialog.open(ReportComponent, { data })
+    }
+
     public closeSchedulingDialog() {
         this.schedulinDialogRef.close()
     }
@@ -50,4 +56,10 @@ export class DialogService {
     public closeConfirmationDialog() {
         this.confirmationDialogRef.close()
     }
+
+    public closeReportDialog() {
+        this.reportDialogRef.close()
+    }
+
+    
 }

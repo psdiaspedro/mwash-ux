@@ -1,0 +1,45 @@
+<h1 mat-dialog-title>Relatório</h1>
+<main mat-dialog-content>
+    <form [formGroup]="reportForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Cliente</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Período</mat-label>
+            <input 
+            matInput 
+            [matDatepicker]="dp"
+            [formControl]="date"
+            readonly
+            >
+            <mat-datepicker-toggle matIconSuffix [for]="dp">
+                
+            </mat-datepicker-toggle>
+            <mat-datepicker 
+            #dp
+            startView="multi-year"
+            (monthSelected)="setMonthAndYear($event, dp)"
+            >
+            </mat-datepicker>
+        </mat-form-field>
+    </form>
+</main>
+<footer mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="onGerarRelatorio()">
+        <mat-icon>
+            save
+        </mat-icon>
+            &nbsp;Gerar Relatório
+    </button>
+    <button mat-raised-button (click)="dialogService.closeReportDialog()">
+        <mat-icon>
+            reply
+        </mat-icon>
+            &nbsp;Voltar
+    </button>
+</footer>

@@ -19,6 +19,7 @@ import { SchedulerComponent } from './scheduler/scheduler.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReportComponent } from './report/report.component';
 
 export function momentAdapterFactory() {
     return adapterFactory(moment);
@@ -32,6 +33,7 @@ export function momentAdapterFactory() {
         EditorComponent,
         SchedulerComponent,
         ConfirmationComponent,
+        ReportComponent,
         HomeComponent
     ],
     imports: [
