@@ -1,0 +1,16 @@
+h1 {
+    text-align: center;
+}
+
+main {
+    min-width: 400px;
+
+    .mat-mdc-form-field {
+        display: block;
+    }
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+}

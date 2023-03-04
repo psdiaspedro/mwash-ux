@@ -1,11 +1,11 @@
-<h1 mat-dialog-title>Relatório</h1>
+<h1 mat-dialog-title>Relatório Orçamentário</h1>
 <main mat-dialog-content>
     <form [formGroup]="reportForm">
         <mat-form-field appearance="fill">
             <mat-label>Cliente</mat-label>
-            <mat-select>
-              <mat-option *ngFor="let food of foods" [value]="food.value">
-                {{food.viewValue}}
+            <mat-select formControlName="clientes">
+              <mat-option *ngFor="let client of clients" [value]="client.nome">
+                {{client.nome}}
               </mat-option>
             </mat-select>
         </mat-form-field>
@@ -29,7 +29,7 @@
         </mat-form-field>
     </form>
 </main>
-<footer mat-dialog-actions>
+<footer mat-dialog-actions class="actions">
     <button mat-raised-button color="primary" (click)="onGerarRelatorio()">
         <mat-icon>
             save

@@ -170,6 +170,26 @@ export class HomeService {
         )
     }
 
+    public getAllClients() {
+        return this.http.get(`${this.API}/usuarios/buscar_clientes`, {
+            headers: this.authService.defaultHeaders
+        }).pipe(
+            catchError(error => {
+                return throwError(() => error)
+            })
+        )
+    }
+
+    public getClientValues(userId: number, date: string) {
+        return this.http.get(`${this.API}/agendamentos/valores/${userId}/${date}`, {
+            headers: this.authService.defaultHeaders
+        }).pipe(
+            catchError(error => {
+                return throwError(() => error)
+            })
+        )
+    }
+
     private getColor(color: any) {
 
         if (color >= 1 && color <= 99) {

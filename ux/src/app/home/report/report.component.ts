@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   DateAdapter,
@@ -15,9 +15,10 @@ import { Property } from '../property';
 
 import { default as _rollupMoment, Moment } from 'moment';
 import { SnackService } from '../snack.service';
-import { AuthService } from 'src/app/auth.service';
+// import { AuthService } from 'src/app/auth.service';
 import { HomeService } from '../home.service';
 import { DialogService } from '../dialog.service';
+import { UrlSerializer } from '@angular/router';
 
 const moment = _rollupMoment || _moment;
 
@@ -33,9 +34,16 @@ export const MY_FORMATS = {
   },
 };
 
-interface Food {
-  value: string;
-  viewValue: string;
+interface User {
+  id: any;
+  nome: string;
+}
+
+interface UserValues {
+    nome: string,
+    diaAgendamento: string,
+    logadouro: string,
+    valor: number
 }
 
 @Component({
@@ -53,29 +61,31 @@ interface Food {
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class ReportComponent {
+export class ReportComponent implements OnInit {
   public reportForm = new FormGroup({
+    clientes: new FormControl('', Validators.required),
     diaAgendamento: new FormControl('', Validators.required),
     propriedadeID: new FormControl(null, Validators.required),
-    date: new FormControl('', Validators.required),
   });
 
   constructor(
     private snack: SnackService,
-    public auth: AuthService,
+    // public auth: AuthService,
     public homeService: HomeService,
-    public dialogService: DialogService,
+    public dialogService: DialogService
   ) {}
+
+  ngOnInit(): void {
+    this.getAllClients();
+  }
 
   public displayFn(property: Property): string {
     return property ? property.enderecoCompleto : '';
   }
 
-  foods: Food[] = [
-    { value: 'steak-0', viewValue: 'Steak' },
-    { value: 'pizza-1', viewValue: 'Pizza' },
-    { value: 'tacos-2', viewValue: 'Tacos' },
-  ];
+  clients: User[] = [];
+  clientsValues: UserValues[] = [];
+  dataString: string = ""
 
   date = new FormControl(moment());
 
@@ -87,11 +97,48 @@ export class ReportComponent {
     ctrlValue.month(normalizedMonthAndYear.month());
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date.setValue(ctrlValue);
-    console.log(this.date.value);
     datepicker.close();
   }
 
   public onGerarRelatorio() {
-    console.log("gerou")
+    const nome = this.reportForm.controls['clientes'].value;
+    const user = this.clients.find((user) => {
+      return user.nome === nome;
+    });
+    const date = moment(this.date.value).format("YYYY-MM")
+
+    if (user) {
+      this.getClientValues(user.id, date)
+    } else {
+      console.log(`User with nome '${nome}' not found.`);
+    }
+  }
+
+  private getAllClients() {
+    this.homeService.getAllClients().subscribe({
+      next: (response: any) => {
+        this.clients = response;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+  private getClientValues(userId: number, date: string) {
+    this.homeService.getClientValues(userId, date).subscribe({
+        next: (response: any) => {
+            this.clientsValues = response
+            if (this.clientsValues && this.clientsValues.length !== 0 ) {
+                console.log(this.clientsValues)
+                //open dialog
+            } else {
+                this.snack.openErrorSnack("Não foram encontrados valores para o período selecionado")
+            }
+        },
+        error: (error) => {
+            console.log(error)
+        }
+    })
   }
 }
