@@ -1,0 +1,39 @@
+h2 {
+    text-align: center;
+}
+
+table {
+    tr {
+        td {
+            &:first-of-type {
+                font-weight: bold;
+                padding-right: 12px;
+            }
+        }
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.container-report {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header {
+    div {
+        font-weight: bold;
+        color: black;
+    }
+}
+
+.total {
+    div {
+        &:first-of-type {
+            font-weight: bold;
+            color: black;
+        }
+
+        margin-top: 35px;
+    }
+}

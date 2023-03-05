@@ -130,8 +130,7 @@ export class ReportComponent implements OnInit {
         next: (response: any) => {
             this.clientsValues = response
             if (this.clientsValues && this.clientsValues.length !== 0 ) {
-                console.log(this.clientsValues)
-                //open dialog
+                this.dialogService.openValuesDialog(this.clientsValues)
             } else {
                 this.snack.openErrorSnack("Não foram encontrados valores para o período selecionado")
             }

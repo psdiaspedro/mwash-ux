@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>
+    {{clientName}} - {{date}}
+</h1>
+<main mat-dialog-content>
+    <div class="container-report header">
+        <div>
+            Data
+        </div>
+        <div>
+            Rua
+        </div>
+        <div>
+            Valor
+        </div>
+    </div>
+    <div class="container-report" *ngFor="let event of eventsDay">
+        <div>
+            {{event.diaAgendamento}}
+        </div>
+        <div>
+            {{event.logadouro}}
+        </div>
+        <div>
+            {{event.valor | currency: "BRL"}}
+        </div>
+    </div>
+    <div class="container-report total">
+        <div>
+            Total
+        </div>
+        <div>
+            {{total | currency: "BRL"}}
+        </div>
+    </div>
+</main>
+<footer mat-dialog-actions class="actions">
+    <button mat-raised-button color="primary" (click)="generatePDF()">
+        <mat-icon>
+            print
+        </mat-icon>
+            &nbsp;Imprimir Relatório
+    </button>
+    <button mat-raised-button (click)="dialogService.closeValuesDialog()">
+        <mat-icon>
+            reply
+        </mat-icon>
+            &nbsp;Voltar
+    </button>
+</footer>

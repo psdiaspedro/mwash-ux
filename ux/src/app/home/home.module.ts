@@ -20,6 +20,7 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReportComponent } from './report/report.component';
+import { ValuesReportComponent } from './values-report/values-report.component';
 
 export function momentAdapterFactory() {
     return adapterFactory(moment);
@@ -34,6 +35,7 @@ export function momentAdapterFactory() {
         SchedulerComponent,
         ConfirmationComponent,
         ReportComponent,
+        ValuesReportComponent,
         HomeComponent
     ],
     imports: [

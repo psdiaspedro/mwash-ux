@@ -5,6 +5,7 @@ import { EditorComponent } from './editor/editor.component';
 import { ReportComponent } from './report/report.component';
 import { SchedulerComponent } from './scheduler/scheduler.component';
 import { SchedulingComponent } from './scheduling/scheduling.component';
+import { ValuesReportComponent } from './values-report/values-report.component';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +17,7 @@ export class DialogService {
     private schedulerDialogRef:  any
     private confirmationDialogRef:  any
     private reportDialogRef:  any
+    private valuesDialogRef: any
 
     constructor(
         private dialog: MatDialog,
@@ -41,6 +43,10 @@ export class DialogService {
         this.reportDialogRef = this.dialog.open(ReportComponent, { data })
     }
 
+    public openValuesDialog(data?: any) {
+        this.valuesDialogRef = this.dialog.open(ValuesReportComponent, { data })
+    }
+
     public closeSchedulingDialog() {
         this.schedulinDialogRef.close()
     }
@@ -61,5 +67,7 @@ export class DialogService {
         this.reportDialogRef.close()
     }
 
-    
+    public closeValuesDialog() {
+        this.valuesDialogRef.close()
+    }
 }

@@ -27,6 +27,8 @@
     "angular-calendar": "^0.31.0",
     "date-fns": "^2.29.3",
     "json-server": "^0.17.1",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.28",
     "luxon": "^3.2.1",
     "moment": "^2.29.4",
     "ngx-mask": "^15.0.2",

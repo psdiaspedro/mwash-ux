@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../auth.service';
 import { DialogService } from './dialog.service';
 
 @Component({
@@ -9,7 +10,8 @@ import { DialogService } from './dialog.service';
 export class HomeComponent {
 
     constructor(
-        private dialogService: DialogService
+        private dialogService: DialogService,
+        public auth: AuthService
     ) {}
 
     public onCreateEvent() {
