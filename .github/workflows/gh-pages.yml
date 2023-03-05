@@ -35,4 +35,4 @@ jobs:
 
     - name: Deploy
       if: success()
-      run: aws s3 sync ./dist/mwash-ux s3://mcoorp-mwash-angular-github-actions-amazon-s3
+      run: aws s3 sync ./dist/mcoorp-mwash-angular-github-actions-amazon-s3 s3://mcoorp-mwash-angular-github-actions-amazon-s3
