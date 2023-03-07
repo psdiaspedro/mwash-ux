@@ -13,7 +13,7 @@ import { Property } from "./property"
 })
 export class HomeService {
 
-    private readonly API = "http://localhost:5000"
+    private readonly API = "http://18.228.151.243:5000:5000"
     public _refreshNeeded$: Subject<any> = new Subject()
     
     
