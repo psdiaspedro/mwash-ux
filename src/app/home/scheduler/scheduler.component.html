@@ -52,7 +52,12 @@
                 <mat-option value="14:00">14:00</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-label>Checkin</mat-label>
+        <mat-radio-group formControlName="checkin">
+            <mat-radio-button class="example-margin" value="16:00">Sim</mat-radio-button>
+            <mat-radio-button class="example-margin" value="">Não </mat-radio-button>
+        </mat-radio-group>
+<!--         <mat-form-field appearance="fill">
             <mat-label>Checkin</mat-label>
             <input 
             matInput 
@@ -61,7 +66,7 @@
             [dropSpecialCharacters]="false"
             placeholder="Horario do checkin HH:mm"
             >
-        </mat-form-field>
+        </mat-form-field> -->
         <mat-form-field appearance="fill">
             <mat-label>Observações</mat-label>
             <input matInput formControlName="obs">
