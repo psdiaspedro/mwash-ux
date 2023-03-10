@@ -189,6 +189,16 @@ export class HomeService {
             })
         )
     }
+    
+    public getClientData() {
+        return this.http.get(`${this.API}/usuario`, {
+            headers: this.authService.defaultHeaders
+        }).pipe(
+            catchError(error => {
+                return throwError(() => error)
+            })
+        )
+    }
 
     private getColor(color: any) {
 
