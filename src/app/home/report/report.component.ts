@@ -19,6 +19,7 @@ import { SnackService } from '../snack.service';
 import { HomeService } from '../home.service';
 import { DialogService } from '../dialog.service';
 import { UrlSerializer } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
 
 const moment = _rollupMoment || _moment;
 
@@ -72,11 +73,16 @@ export class ReportComponent implements OnInit {
     private snack: SnackService,
     // public auth: AuthService,
     public homeService: HomeService,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    public auth: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.getAllClients();
+    if (this.auth.isAdmin) {
+      this.getAllClients()
+    } else {
+      this.getClientData()
+    }
   }
 
   public displayFn(property: Property): string {
@@ -86,6 +92,8 @@ export class ReportComponent implements OnInit {
   clients: User[] = [];
   clientsValues: UserValues[] = [];
   dataString: string = ""
+  
+  idClienteLogado: number = 0;
 
   date = new FormControl(moment());
 
@@ -101,16 +109,21 @@ export class ReportComponent implements OnInit {
   }
 
   public onGerarRelatorio() {
-    const nome = this.reportForm.controls['clientes'].value;
-    const user = this.clients.find((user) => {
-      return user.nome === nome;
-    });
-    const date = moment(this.date.value).format("YYYY-MM")
-
-    if (user) {
-      this.getClientValues(user.id, date)
+    if (this.auth.isAdmin) {
+      const nome = this.reportForm.controls['clientes'].value;
+      const user = this.clients.find((user) => {
+        return user.nome === nome;
+      });
+      const date = moment(this.date.value).format("YYYY-MM")
+  
+      if (user) {
+        this.getClientValues(user.id, date)
+      } else {
+        console.log(`User with nome '${nome}' not found.`);
+      }
     } else {
-      console.log(`User with nome '${nome}' not found.`);
+      const date = moment(this.date.value).format("YYYY-MM")
+      this.getClientValues(this.idClienteLogado, date)
     }
   }
 
@@ -138,6 +151,17 @@ export class ReportComponent implements OnInit {
         error: (error) => {
             console.log(error)
         }
+    })
+  }
+  
+  private getClientData() {
+    this.homeService.getClientData().subscribe({
+      next: (response: any) => {
+        this.idClienteLogado = response.id
+      },
+      error: (error) => {
+        console.log(error)
+      }
     })
   }
 }
