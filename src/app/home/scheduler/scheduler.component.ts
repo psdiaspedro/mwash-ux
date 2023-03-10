@@ -21,7 +21,7 @@ export class SchedulerComponent implements OnInit {
         diaAgendamento: new FormControl("", Validators.required),
         propriedadeID: new FormControl(null, Validators.required),
         checkout: new FormControl(null, Validators.required),
-        checkin: new FormControl(),
+        checkin: new FormControl(""),
         obs: new FormControl(),
     })
 
