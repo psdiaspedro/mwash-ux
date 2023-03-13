@@ -9,7 +9,7 @@ import { catchError, EMPTY, of, throwError } from 'rxjs';
 export class AuthService {
 
 
-    private readonly API = "https://18.228.151.243:5000"
+    private readonly API = "http://18.228.151.243:5000"
 
     constructor(
         private router: Router,
