@@ -13,7 +13,7 @@ import { Property } from "./property"
 })
 export class HomeService {
 
-    private readonly API = "https://18.228.151.243:5000"
+    private readonly API = "https://api.maicowash.com"
     public _refreshNeeded$: Subject<any> = new Subject()
     
     
