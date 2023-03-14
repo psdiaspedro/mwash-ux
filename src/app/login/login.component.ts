@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
         senha: new FormControl("", Validators.required)
     })
 
-    private readonly API = "https://18.228.151.243:5000"
+    private readonly API = "https://api.maicowash.com"
 
     constructor(
         private snack: SnackService,
