@@ -29,6 +29,8 @@ export class HomeService {
     
     private convertDate(day: string, hour: string) {
         let convertedDay = new Date(day)
+        convertedDay.setHours(convertedDay.getHours() + 3)
+        
         let convertedHour = hour.split(":")
         
         convertedDay.setHours(parseInt(convertedHour[0]), parseInt(convertedHour[1]))
