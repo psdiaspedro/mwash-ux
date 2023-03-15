@@ -39,7 +39,9 @@ export class SchedulingComponent implements OnInit {
 
     private validateDateFormat(currentDate: string) {
         if (!moment(currentDate, "DD/MM/YYYY", true).isValid()) {
-            this.data.diaAgendamento = moment(this.data.diaAgendamento).format("DD/MM/YYYY") 
+            const validDate = moment(this.data.diaAgendamento).add(3, "hours")
+            this.data.diaAgendamento = validDate.format("DD/MM/YYYY")
+            console.log(this.data.diaAgendamento)
         }
     }
 
