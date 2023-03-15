@@ -86,6 +86,9 @@ export class ValuesReportComponent implements OnInit {
 
     public generatePDF() {
         const doc = new jsPDF();
+        
+        const img = "assets/img/logo.png"
+        doc.addImage(img, "PNG", 80, 10, 50, 40)
 
         const tableHeaders = [['Dia Agendamento', 'Logadouro', 'Valor']];
 
@@ -102,6 +105,7 @@ export class ValuesReportComponent implements OnInit {
         autoTable(doc, {
             head: tableHeaders,
             body: tableData,
+            margin: {top: 70},
             didParseCell: function (data) {
                 if (data.row.index === tableData.length - 1 && data.column.index === tableHeaders[0].length - 1) {
                   data.cell.styles.fontStyle = 'bold';
