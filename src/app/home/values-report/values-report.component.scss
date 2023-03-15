@@ -27,13 +27,20 @@ table {
     }
 }
 
+.total-f {
+    margin-top: 35px;
+}
+
 .total {
     div {
         &:first-of-type {
             font-weight: bold;
             color: black;
         }
-
-        margin-top: 35px;
     }
+}
+
+.street {
+    margin-left: 30px;
+    margin-right: 30px;
 }
