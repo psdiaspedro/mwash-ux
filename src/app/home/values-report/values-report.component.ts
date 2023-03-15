@@ -62,7 +62,7 @@ export class ValuesReportComponent implements OnInit {
         this.eventsDay = this.data.map((event: any) => {
             return {
                 ...event,
-                diaAgendamento: moment(event.diaAgendamento).format("DD/MM/YYYY")
+                diaAgendamento: moment(event.diaAgendamento).add(3, "hours").format("DD/MM/YYYY")
             }
         })
     }
