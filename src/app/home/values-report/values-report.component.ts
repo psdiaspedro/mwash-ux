@@ -8,8 +8,6 @@ import { SnackService } from '../snack.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 
-
-
 interface Event {
     nome: string,
     diaAgendamento: string,
@@ -28,6 +26,8 @@ export class ValuesReportComponent implements OnInit {
     clientName: string = ""
     eventsDay: Event[] = []
     total: number = 0
+    totalFirstQ: number = 0
+    totalLastQ: number = 0
     
     constructor(
         public auth: AuthService,
@@ -54,8 +54,7 @@ export class ValuesReportComponent implements OnInit {
     private configInfos() {
         this.data.forEach((element: any) => {
             this.clientName = element.nome
-            const value = parseFloat(element.valor)
-            this.total += value
+            this.getQuarter(element.diaAgendamento,parseFloat(element.valor))
         });
     }
 
@@ -66,6 +65,23 @@ export class ValuesReportComponent implements OnInit {
                 diaAgendamento: moment(event.diaAgendamento).format("DD/MM/YYYY")
             }
         })
+    }
+    
+    private getQuarter(day: string, value: number) {
+        let convertedDay = this.convertDate(day)
+        if (convertedDay.getDate() <= 15) {
+            this.totalFirstQ += value
+        } else {
+            this.totalLastQ += value
+        }
+        this.total += value
+    }
+    
+    private convertDate(day: string) {
+        let convertedDay = new Date(day)
+        convertedDay.setHours(convertedDay.getHours() + 3)
+
+        return convertedDay
     }
 
     public generatePDF() {
