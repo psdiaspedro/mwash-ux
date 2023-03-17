@@ -27,7 +27,7 @@ export class CalendarComponent implements OnInit {
     viewDate: Date = new Date();
     events: CalendarEvent[] = []
     viewButton = this.viewMode
-    refresh: boolean = false
+    refresh: boolean = true
 
     totalEventsToday: number = 0
 
