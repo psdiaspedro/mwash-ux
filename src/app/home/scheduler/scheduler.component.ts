@@ -92,7 +92,7 @@ export class SchedulerComponent implements OnInit {
             return
         }
         
-        if (this.checkTimeLimit()) {
+        if (!this.auth.isAdmin && this.checkTimeLimit()) {
             this.snack.openTimeErrorSnack("O horário limite de agendamentos para o dia seguinte é 17h00, para emergencias favor contatar a administração")
             return
         }
