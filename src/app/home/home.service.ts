@@ -7,6 +7,7 @@ import { catchError, EMPTY, map, Subject, take, tap, throwError } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { Event } from "./events"
 import { Property } from "./property"
+import * as moment from 'moment-timezone';
 
 @Injectable({
     providedIn: 'root'
@@ -26,15 +27,25 @@ export class HomeService {
     get refreshNeeded$() {
         return this._refreshNeeded$
     }
-    
-    private convertDate(day: string, hour: string) {
+
+    private getUserOffSet() {
+        const userTimeZone = moment.tz.guess();
+        const offset = moment.tz(userTimeZone).utcOffset()
+        return offset / 60
+    }
+
+    private convertUniversalDate(day: string, hour: string) {
+        const offset = this.getUserOffSet()
+        
         let convertedDay = new Date(day)
-        convertedDay.setHours(convertedDay.getHours() + 3)
-        
-        let convertedHour = hour.split(":")
-        
+        if (offset < 0) {
+            convertedDay.setHours(convertedDay.getHours() + (offset * -1))
+        } else {
+            convertedDay.setHours(convertedDay.getHours() - offset)
+        }
+        let convertedHour = hour.split(":") 
+    
         convertedDay.setHours(parseInt(convertedHour[0]), parseInt(convertedHour[1]))
-        
         return convertedDay
     }
 
@@ -51,7 +62,7 @@ export class HomeService {
                         }
                         return {
                             title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
-                            start: this.convertDate(event.diaAgendamento, event.checkout),
+                            start: this.convertUniversalDate(event.diaAgendamento, event.checkout),
                             color: this.getColor(event.cor),
                             meta: event
                         }
@@ -78,7 +89,7 @@ export class HomeService {
                         }
                         return {
                             title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
-                            start: this.convertDate(event.diaAgendamento, event.checkout),
+                            start: this.convertUniversalDate(event.diaAgendamento, event.checkout),
                             meta: event
                         }
                     })
@@ -270,3 +281,6 @@ export class HomeService {
 // 300 - 399 -> Zona Oeste
 // 400 - 499 -> Zona Norte
 // 500 - 599 -> ZOna Oeste
+
+//event.checkout == 11:00:00
+//dia.agendamento == 2023-04-28T00:00:00Z
