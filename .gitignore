@@ -1,0 +1,29 @@
+# Dependencies
+/node_modules
+
+# Ignore built files
+/dist/
+/tmp/
+/out-tsc
+*.o
+*.ko
+*.obj
+*.elf
+
+# Ignore log files and other editor backup files
+logs
+*.log
+*.swp
+*~
+#*#
+.#*
+
+# Ignore testing files
+/coverage
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
