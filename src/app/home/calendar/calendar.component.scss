@@ -8,3 +8,29 @@ nav {
 main {
     padding: 12px;
 }
+
+.mdc-card {
+    position: fixed;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .mat-mdc-card-title {
+        font-family: Museo;
+    }
+
+}
+
+.report {
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+}
+
+.createEvent {
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
+    z-index: 1;
+}

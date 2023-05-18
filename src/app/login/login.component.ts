@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { trackByHourSegment } from 'angular-calendar/modules/common/util/util';
-import { catchError, EMPTY, take, throwError } from 'rxjs';
+import { catchError, take, throwError } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { SnackService } from '../home/snack.service';
+import { environment } from '../../environments/environment';
+import { JwtData } from 'src/interfaces/jwt';
 
 @Component({
     selector: 'app-login',
@@ -18,8 +19,6 @@ export class LoginComponent implements OnInit {
         email: new FormControl("", Validators.required),
         senha: new FormControl("", Validators.required)
     })
-
-    private readonly API = "https://api.maicowash.com"
 
     constructor(
         private snack: SnackService,
@@ -40,8 +39,9 @@ export class LoginComponent implements OnInit {
 
         this.login()
             .subscribe({
-                next: (response: any) => {
-                    this.createSession(response.id, response.nome, response.token)
+                next: (response: object) => {
+                    const res = response as JwtData
+                    this.createSession(res.id, res.nome, res.token)
                     this.redirect()
                 },
                 error: (error) => {
@@ -53,11 +53,10 @@ export class LoginComponent implements OnInit {
                     }
                 }
             })
-        // console.log(this.authService.decodeToken)
     }
 
     private login() {
-        return this.http.post(`${this.API}/login`, this.loginForm.value, {
+        return this.http.post(`${environment.API}/login`, this.loginForm.value, {
             headers: {
                 "content-type": "application/json"
             }

@@ -1,22 +1,19 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { _AbstractConstructor } from '@angular/material/core';
-import { CalendarEvent } from 'angular-calendar';
-import { trackByHourSegment } from 'angular-calendar/modules/common/util/util';
-import { catchError, EMPTY, map, Subject, take, tap, throwError } from 'rxjs';
+import { catchError, map, Subject, take, tap, throwError } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { Event } from "./events"
-import { Property } from "./property"
+import { Property } from "../../interfaces/property"
 import * as moment from 'moment-timezone';
+import { environment } from '../../environments/environment';
+import { CompleteEventData } from 'src/interfaces/complete-event-data';
+import { EventData } from 'src/interfaces/event';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HomeService {
 
-    private readonly API = "https://api.maicowash.com"
-    public _refreshNeeded$: Subject<any> = new Subject()
-    
+    public _refreshNeeded$: Subject<object> = new Subject()
     
     constructor(
         private http: HttpClient,
@@ -34,28 +31,28 @@ export class HomeService {
         return offset / 60
     }
 
-    private convertUniversalDate(day: string, hour: string) {
+    public convertUniversalDate(day: string, hour: string) {
         const offset = this.getUserOffSet()
         
-        let convertedDay = new Date(day)
+        const convertedDay = new Date(day)
         if (offset < 0) {
             convertedDay.setHours(convertedDay.getHours() + (offset * -1))
         } else {
             convertedDay.setHours(convertedDay.getHours() - offset)
         }
-        let convertedHour = hour.split(":") 
+        const convertedHour = hour.split(":") 
     
         convertedDay.setHours(parseInt(convertedHour[0]), parseInt(convertedHour[1]))
         return convertedDay
     }
 
     public getAllEvents(year: number, month: string) {
-        return this.http.get<Array<Event>>(`${this.API}/agendamentos/${year}-${month}`, {
+        return this.http.get<Array<CompleteEventData>>(`${environment.API}/agendamentos/${year}-${month}`, {
             headers: this.authService.defaultHeaders
         }).pipe(
-            map((events: any) => {
+            map((events: CompleteEventData[]) => {
                 if (events) {
-                    return events.map((event: Event) => {
+                    return events.map((event: CompleteEventData) => {
                         let icon = ""
                         if (event.obs) {
                             icon = "&#x26A0;&#xFE0F;"
@@ -77,12 +74,12 @@ export class HomeService {
     }
 
     public getMyEvents(year: number, month: string) {
-        return this.http.get<Array<Event>>(`${this.API}/agendamentos/usuario/${year}-${month}`, {
+        return this.http.get<Array<CompleteEventData>>(`${environment.API}/agendamentos/usuario/${year}-${month}`, {
             headers: this.authService.defaultHeaders
         }).pipe(
-            map((events: any) => {
+            map((events: CompleteEventData[]) => {
                 if (events) {
-                    return events.map((event: Event) => {
+                    return events.map((event: CompleteEventData) => {
                         let icon = ""
                         if (event.obs) {
                             icon = "<mat-icon>add</mat-icon>"
@@ -103,10 +100,10 @@ export class HomeService {
     }
 
     public getAllProperties() {
-        return this.http.get<Array<Property>>(`${this.API}/todas_propriedades`, {
+        return this.http.get<Array<Property>>(`${environment.API}/todas_propriedades`, {
             headers: this.authService.defaultHeaders
         }).pipe(
-            map((events: any) => {
+            map((events: Property[]) => {
                 if (events) {
                     return events.map((event: Property) => {
                         event["enderecoCompleto"] = `${event.logadouro} ${event.numero} ${event.complemento ? ', ' + event.complemento: ''}`;
@@ -122,11 +119,12 @@ export class HomeService {
     }
 
     public getMyProperties() {
-        return this.http.get<Array<Property>>(`${this.API}/minhas_propriedades`, {
+        return this.http.get<Array<Property>>(`${environment.API}/minhas_propriedades`, {
             headers: this.authService.defaultHeaders
         }).pipe(
-            map((events: any) => {
+            map((events: Property[]) => {
                 if (events) {
+                    console.log(events)
                     return events.map((event: Property) => {
                         event["enderecoCompleto"] = `${event.logadouro} ${event.numero} ${event.complemento ? ', ' + event.complemento: ''}`;
                         return event
@@ -141,8 +139,8 @@ export class HomeService {
     }
     
 
-    public createEvent(propriedadeId: number, payload: any) {
-        return this.http.post(`${this.API}/agendamentos/propriedades/${propriedadeId}`, payload, {
+    public createEvent(propriedadeId: number, payload: EventData) {
+        return this.http.post(`${environment.API}/agendamentos/propriedades/${propriedadeId}`, payload, {
             headers: this.authService.defaultHeaders
         }).pipe(
             tap(_ => {
@@ -156,7 +154,7 @@ export class HomeService {
     }
 
     public deleteEvent(agendamentoId: number) {
-        return this.http.delete(`${this.API}/agendamentos/${agendamentoId}`, {
+        return this.http.delete(`${environment.API}/agendamentos/${agendamentoId}`, {
             headers: this.authService.defaultHeaders
         }).pipe(
             tap(_ => {
@@ -169,8 +167,8 @@ export class HomeService {
         )
     }
 
-    public editEvent(agendamentoId: number, payload: any) {
-        return this.http.patch(`${this.API}/agendamentos/${agendamentoId}`, payload,{
+    public editEvent(agendamentoId: number, payload: EventData) {
+        return this.http.patch(`${environment.API}/agendamentos/${agendamentoId}`, payload,{
             headers: this.authService.defaultHeaders
         }).pipe(
             tap(_ => {
@@ -184,7 +182,7 @@ export class HomeService {
     }
 
     public getAllClients() {
-        return this.http.get(`${this.API}/usuarios/buscar_clientes`, {
+        return this.http.get(`${environment.API}/usuarios/buscar_clientes`, {
             headers: this.authService.defaultHeaders
         }).pipe(
             catchError(error => {
@@ -194,7 +192,7 @@ export class HomeService {
     }
 
     public getClientValues(userId: number, date: string) {
-        return this.http.get(`${this.API}/agendamentos/valores/${userId}/${date}`, {
+        return this.http.get(`${environment.API}/agendamentos/valores/${userId}/${date}`, {
             headers: this.authService.defaultHeaders
         }).pipe(
             catchError(error => {
@@ -204,7 +202,7 @@ export class HomeService {
     }
     
     public getClientData() {
-        return this.http.get(`${this.API}/usuario`, {
+        return this.http.get(`${environment.API}/usuario`, {
             headers: this.authService.defaultHeaders
         }).pipe(
             catchError(error => {
@@ -213,7 +211,7 @@ export class HomeService {
         )
     }
 
-    private getColor(color: any) {
+    private getColor(color: number) {
 
         if (color >= 1 && color <= 99) {
             return {

@@ -1,17 +1,15 @@
 
 import { Component, OnInit } from '@angular/core';
-import { CalendarEvent, CalendarMonthViewDay, CalendarView, CalendarWeekViewBeforeRenderEvent, DateAdapter } from 'angular-calendar';
-import { first, forkJoin, last, Observable, take } from 'rxjs';
+import { CalendarEvent, CalendarView, CalendarWeekViewBeforeRenderEvent, DateAdapter } from 'angular-calendar';
+import { forkJoin } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 import { DialogService } from '../dialog.service';
 import { HomeService } from '../home.service';
 import * as moment from 'moment';
 import { SnackService } from '../snack.service';
-import { WeekDay } from '@angular/common';
-import { MatMonthView } from '@angular/material/datepicker';
-import {getEventsInPeriod} from 'calendar-utils';
+import { getEventsInPeriod } from 'calendar-utils';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {startOfDay, endOfDay, daysInWeek} from 'date-fns';
+import { startOfDay, endOfDay } from 'date-fns';
 import { HostListener } from '@angular/core'
 
 
@@ -27,10 +25,8 @@ export class CalendarComponent implements OnInit {
     viewDate: Date = new Date();
     events: CalendarEvent[] = []
     viewButton = this.viewMode
-    refresh: boolean = true
-
-    totalEventsToday: number = 0
-
+    refresh = true
+    totalEventsToday = 0
     hideButton = false
 
     private currentMonth: Date = new Date()
@@ -40,7 +36,8 @@ export class CalendarComponent implements OnInit {
         private dialogService: DialogService,
         public homeService: HomeService,
         public auth: AuthService,
-        private modal: NgbModal, private dateAdapter: DateAdapter
+        private modal: NgbModal, 
+        private dateAdapter: DateAdapter
     ) {}
 
     ngOnInit() {
@@ -50,7 +47,7 @@ export class CalendarComponent implements OnInit {
         }
         this.resize()
         this.auth.checkToken()
-        this.homeService._refreshNeeded$ //isso só acontece quando da um refresh
+        this.homeService._refreshNeeded$
             .subscribe(() =>{
                 this.refresh = true
                 this.checkCurrentMonth()
@@ -69,10 +66,10 @@ export class CalendarComponent implements OnInit {
     }
 
     public checkCurrentMonth() {
-        const sunday = moment(this.viewDate).startOf("week").toDate() //first DOTW
-        const saturday = moment(this.viewDate).endOf("week").toDate() //last DOTW
+        const sunday = moment(this.viewDate).startOf("week").toDate()
+        const saturday = moment(this.viewDate).endOf("week").toDate()
     
-        const areSameMonth = moment(sunday).isSame(moment(saturday), "month") //se na mesma semana tem 2 meses diferentes
+        const areSameMonth = moment(sunday).isSame(moment(saturday), "month")
     
         if (this.viewMode == CalendarView.Week) {
             const year = moment(sunday).year()
@@ -101,20 +98,20 @@ export class CalendarComponent implements OnInit {
     private getEvents(firstYear: number, firstMonth: string, secondYear?: number, secondMonth?: string) {
         if (this.auth.isAdmin) {
             if (arguments.length <= 2 || typeof secondYear === "undefined" || typeof secondMonth === "undefined") {
-                this.getAllEvents(firstYear, firstMonth)
+                this.getAllEvents()
             } else {
                 this.getAllEventsDoubleMonth(firstYear, firstMonth, secondYear, secondMonth)
             }
         } else {
             if (arguments.length <= 2 || typeof secondYear === "undefined" || typeof secondMonth === "undefined") {
-                this.getMyEvents(firstYear, firstMonth)
+                this.getMyEvents()
             } else {
                 this.getMyEventsDoubleMonth(firstYear, firstMonth, secondYear, secondMonth)
             }
         }
     }
 
-    private getAllEvents(year: number, month: string) {
+    private getAllEvents() {
         const ano = this.viewDate.getFullYear()
         const mes = (this.viewDate.getMonth() + 1).toString().padStart(2, "0")
 
@@ -123,9 +120,9 @@ export class CalendarComponent implements OnInit {
                 next: (events: Array<CalendarEvent>) => {
                     this.events = events
                 },
-                error: (error => {
+                error: () => {
                     this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
-                })
+                }
             })
     }
 
@@ -137,13 +134,13 @@ export class CalendarComponent implements OnInit {
             next: res => {
                 this.events = this.mergeEvents(res[0], res[1])
             },
-            error: error => {
+            error: () => {
                 this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
             }
         })
     }
 
-    private getMyEvents(year: number, month: string) {
+    private getMyEvents() {
         const ano = this.viewDate.getFullYear()
         const mes = (this.viewDate.getMonth() + 1).toString().padStart(2, "0")
 
@@ -152,9 +149,9 @@ export class CalendarComponent implements OnInit {
                     next: (events: Array<CalendarEvent>) => {
                         this.events = events
                     },
-                    error: (error => {
+                    error: () => {
                         this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
-                    })
+                    }
             })
     }
 
@@ -167,7 +164,7 @@ export class CalendarComponent implements OnInit {
                 this.events = this.mergeEvents(res[0], res[1])
                 console.log(this.events)
             },
-            error: error => {
+            error: () => {
                 this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
             }
         })
@@ -201,5 +198,9 @@ export class CalendarComponent implements OnInit {
           })
           return column;
         })
+    }
+
+    public onCreateEvent() {
+        this.dialogService.openSchedulerDialog(this.events)
     }
 }   

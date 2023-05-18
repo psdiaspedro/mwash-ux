@@ -1,73 +1,76 @@
-import { Inject, Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Injectable } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { EditorComponent } from './editor/editor.component';
 import { ReportComponent } from './report/report.component';
 import { SchedulerComponent } from './scheduler/scheduler.component';
 import { SchedulingComponent } from './scheduling/scheduling.component';
 import { ValuesReportComponent } from './values-report/values-report.component';
+import { CompleteEventData } from 'src/interfaces/complete-event-data';
+import { ReportClientData } from 'src/interfaces/client-report';
+import { CalendarEvent } from 'angular-calendar';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DialogService {
     
-    private editorDialogRef: any
-    private schedulinDialogRef:  any
-    private schedulerDialogRef:  any
-    private confirmationDialogRef:  any
-    private reportDialogRef:  any
-    private valuesDialogRef: any
+    private editorDialogRef?: MatDialogRef<EditorComponent>
+    private schedulinDialogRef?:  MatDialogRef<SchedulingComponent>
+    private schedulerDialogRef?:  MatDialogRef<SchedulerComponent>
+    private confirmationDialogRef?:  MatDialogRef<ConfirmationComponent>
+    private reportDialogRef?:  MatDialogRef<ReportComponent>
+    private valuesDialogRef?: MatDialogRef<ValuesReportComponent>
 
     constructor(
         private dialog: MatDialog,
-    ) { }
+    ) {}
 
-    public openSchedulingDialog(data?: any) {
+    public openSchedulingDialog(data?: CompleteEventData) {
         this.schedulinDialogRef = this.dialog.open(SchedulingComponent, { data })
     }
 
-    public openEditorDialog(data?: any) {
+    public openEditorDialog(data?: CompleteEventData) {
         this.editorDialogRef = this.dialog.open(EditorComponent, { data })        
     }
 
-    public openSchedulerDialog(data?: any) {
+    public openSchedulerDialog(data?: CalendarEvent[]) {
         this.schedulerDialogRef = this.dialog.open(SchedulerComponent, { data })
     }
 
-    public openConfirmationDialog(data?: any) {
+    public openConfirmationDialog(data?: CompleteEventData) {
         this.confirmationDialogRef = this.dialog.open(ConfirmationComponent, { data })
     }
 
-    public openReportDialog(data?: any) {
-        this.reportDialogRef = this.dialog.open(ReportComponent, { data })
+    public openReportDialog() {
+        this.reportDialogRef = this.dialog.open(ReportComponent)
     }
 
-    public openValuesDialog(data?: any) {
+    public openValuesDialog(data?: ReportClientData[]) {
         this.valuesDialogRef = this.dialog.open(ValuesReportComponent, { data })
     }
 
     public closeSchedulingDialog() {
-        this.schedulinDialogRef.close()
+        this.schedulinDialogRef?.close()
     }
     
     public closeEditorDialog() {
-        this.editorDialogRef.close()
+        this.editorDialogRef?.close()
     }
 
     public closeSchedulerDialog() {
-        this.schedulerDialogRef.close()
+        this.schedulerDialogRef?.close()
     }
 
     public closeConfirmationDialog() {
-        this.confirmationDialogRef.close()
+        this.confirmationDialogRef?.close()
     }
 
     public closeReportDialog() {
-        this.reportDialogRef.close()
+        this.reportDialogRef?.close()
     }
 
     public closeValuesDialog() {
-        this.valuesDialogRef.close()
+        this.valuesDialogRef?.close()
     }
 }

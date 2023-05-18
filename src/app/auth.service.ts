@@ -1,22 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, EMPTY, of, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
 
-
-    private readonly API = "https://api.maicowash.com"
-
     constructor(
         private router: Router,
         private http: HttpClient
     ) { }
 
-    
     get decodeToken() {
         const payload = this.accessToken?.split(".")[1] || ""
         if (!payload) return null
@@ -33,7 +30,6 @@ export class AuthService {
         return localStorage.getItem("accessToken") || ""
     }
 
-    
     get authenticated() {
         return this.accessToken ? true : false
     }
@@ -54,8 +50,6 @@ export class AuthService {
 
     public checkToken() {
         this.getToken().subscribe({
-            next: (response) => {
-            },
             error: (error) => {
                 //tratar erro de token expirado?
                 console.log(error)
@@ -65,7 +59,7 @@ export class AuthService {
     }
 
     private getToken() {
-        return this.http.get(`${this.API}/usuario/auth`, {
+        return this.http.get(`${environment.API}/usuario/auth`, {
             headers: this.defaultHeaders,
             observe: "response"
         }).pipe(

@@ -14,10 +14,10 @@ import { CalendarModule, DatePickerModule, TimePickerModule, DateRangePickerModu
 registerLocaleData(ptBr)
 
 @NgModule({
-  declarations: [ //componentes, diretivas e pipes
+  declarations: [
     AppComponent
   ],
-  imports: [ //outros modulos
+  imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -25,7 +25,7 @@ registerLocaleData(ptBr)
     HomeModule,
     CalendarModule, DatePickerModule, TimePickerModule, DateRangePickerModule, DateTimePickerModule,
   ],
-  providers: [ //services que vao ficar disponiveis para os declarations
+  providers: [
     { provide: LOCALE_ID, useValue: 'pt' }
   ], 
   bootstrap: [AppComponent]

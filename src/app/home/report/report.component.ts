@@ -1,51 +1,21 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
-import { Property } from '../property';
-
+import { Property } from '../../../interfaces/property';
 import { default as _rollupMoment, Moment } from 'moment';
 import { SnackService } from '../snack.service';
-// import { AuthService } from 'src/app/auth.service';
 import { HomeService } from '../home.service';
 import { DialogService } from '../dialog.service';
-import { UrlSerializer } from '@angular/router';
 import { AuthService } from 'src/app/auth.service';
+import { MY_FORMATS } from 'src/interfaces/my-formats';
+import { ReportUserData } from 'src/interfaces/report-user';
+import { ReportClientData } from 'src/interfaces/client-report';
+
 
 const moment = _rollupMoment || _moment;
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'MM/YYYY',
-  },
-  display: {
-    dateInput: 'MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
-
-interface User {
-  id: any;
-  nome: string;
-}
-
-interface UserValues {
-    nome: string,
-    diaAgendamento: string,
-    logadouro: string,
-    valor: number
-}
 
 @Component({
   selector: 'app-report',
@@ -63,15 +33,20 @@ interface UserValues {
   encapsulation: ViewEncapsulation.None,
 })
 export class ReportComponent implements OnInit {
+  
   public reportForm = new FormGroup({
     clientes: new FormControl('', Validators.required),
     diaAgendamento: new FormControl('', Validators.required),
     propriedadeID: new FormControl(null, Validators.required),
   });
 
+  public clients: ReportUserData[] = [];
+  private clientsValues: ReportClientData[] = [];
+  private idClienteLogado = 0;
+  public  date = new FormControl(moment());
+
   constructor(
     private snack: SnackService,
-    // public auth: AuthService,
     public homeService: HomeService,
     public dialogService: DialogService,
     public auth: AuthService
@@ -89,22 +64,13 @@ export class ReportComponent implements OnInit {
     return property ? property.enderecoCompleto : '';
   }
 
-  clients: User[] = [];
-  clientsValues: UserValues[] = [];
-  dataString: string = ""
-  
-  idClienteLogado: number = 0;
-
-  date = new FormControl(moment());
-
-  setMonthAndYear(
-    normalizedMonthAndYear: Moment,
-    datepicker: MatDatepicker<Moment>
-  ) {
-    const ctrlValue = this.date.value!;
-    ctrlValue.month(normalizedMonthAndYear.month());
-    ctrlValue.year(normalizedMonthAndYear.year());
-    this.date.setValue(ctrlValue);
+  setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date.value;
+    if (ctrlValue) {
+      ctrlValue.month(normalizedMonthAndYear.month());
+      ctrlValue.year(normalizedMonthAndYear.year());
+      this.date.setValue(ctrlValue);
+    }
     datepicker.close();
   }
 
@@ -129,19 +95,21 @@ export class ReportComponent implements OnInit {
 
   private getAllClients() {
     this.homeService.getAllClients().subscribe({
-      next: (response: any) => {
-        this.clients = response;
+      next: (response: object) => {
+        const res = response as ReportUserData[]
+        this.clients = res;
       },
       error: (error) => {
-        console.log(error);
+        console.log("Erro ao recuperar os clientes para o relatório: ", error);
       },
     });
   }
 
   private getClientValues(userId: number, date: string) {
     this.homeService.getClientValues(userId, date).subscribe({
-        next: (response: any) => {
-            this.clientsValues = response
+        next: (response: object) => {
+          const res = response as ReportClientData[]
+          this.clientsValues = res
             if (this.clientsValues && this.clientsValues.length !== 0 ) {
                 this.dialogService.openValuesDialog(this.clientsValues)
             } else {
@@ -149,15 +117,16 @@ export class ReportComponent implements OnInit {
             }
         },
         error: (error) => {
-            console.log(error)
+            console.log("Erro ao recuperar os valores para o relatório: ", error)
         }
     })
   }
   
   private getClientData() {
     this.homeService.getClientData().subscribe({
-      next: (response: any) => {
-        this.idClienteLogado = response.id
+      next: (response: object) => {
+        const res = response as ReportUserData
+        this.idClienteLogado = res.id
       },
       error: (error) => {
         console.log(error)

@@ -12,8 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchedulingComponent } from './scheduling/scheduling.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SchedulerComponent } from './scheduler/scheduler.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';

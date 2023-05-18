@@ -1,14 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, NgControlStatus, ValidatorFn, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { DialogService } from '../dialog.service';
 import { HomeService } from '../home.service';
-import { Agendamento } from './agendamento';
-import { Property } from "../property"
+import { Property } from "../../../interfaces/property"
 import { map, Observable, startWith } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 import { SnackService } from '../snack.service';
+import { EventData } from 'src/interfaces/event';
+import { CalendarEvent } from 'angular-calendar';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CompleteEventData } from 'src/interfaces/complete-event-data';
 
 @Component({
     selector: 'app-scheduler',
@@ -25,7 +27,6 @@ export class SchedulerComponent implements OnInit {
         obs: new FormControl(),
     })
 
-    private payload: Agendamento = {}
     private property: Property = {
         id: 0,
         cidade: "",
@@ -36,8 +37,10 @@ export class SchedulerComponent implements OnInit {
         enderecoCompleto: "",
     }
 
-    public properties: Array<Property> = []
-    public filteredOptions: Observable<any> = new Observable()
+    private payload: EventData = {}
+    private properties: Array<Property> = []
+    public filteredOptions: Observable<Property[]> = new Observable()
+    public allEvents: CompleteEventData[] = []
 
 
     constructor(
@@ -45,10 +48,11 @@ export class SchedulerComponent implements OnInit {
         public auth: AuthService,
         public homeService: HomeService,
         public dialogService: DialogService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public events: CalendarEvent[]
     ) { }
 
     ngOnInit(): void {
+        this.fillAllEvents()
         if (this.auth.isAdmin) {
             this.getAllProperties()
         } else {
@@ -62,6 +66,10 @@ export class SchedulerComponent implements OnInit {
                     return address ? this._filter(address as string) : this.properties.slice()
                 })
             )
+        // this.allEvents.forEach((event) => {
+        //     const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
+        //     console.log(formattedDate)
+        // })
     }
 
     private checkTimeLimit(): boolean {
@@ -105,7 +113,11 @@ export class SchedulerComponent implements OnInit {
         if (this.createEventForm.value.obs) {
             this.payload.obs = this.createEventForm.value.obs
         }
-        console.log(this.payload)
+        if (this.compareDates()) {
+            this.snack.openTimeErrorSnack("Ja existe um agendameto par a propriedade e data escolhida")
+            return
+        }
+        this.checkDoubleEvents()
         this.createEvent()
     }
 
@@ -127,7 +139,7 @@ export class SchedulerComponent implements OnInit {
     private getMyProperties() {
         this.homeService.getMyProperties()
             .subscribe(
-                (properties: any) => {
+                (properties: Property[]) => {
                     this.properties = properties
                 }
             )
@@ -136,8 +148,7 @@ export class SchedulerComponent implements OnInit {
     private getAllProperties() {
         this.homeService.getAllProperties()
             .subscribe(
-                (properties: any) => {
-
+                (properties: Property[]) => {
                     this.properties = properties
                 }
             )
@@ -150,7 +161,7 @@ export class SchedulerComponent implements OnInit {
     private createEvent() {
         this.homeService.createEvent(this.property.id, this.payload)
             .subscribe({
-                next: (response) => {
+                next: () => {
                     this.dialogService.closeSchedulerDialog()
                     this.snack.openWarningSnack("Agendamento criado com sucesso")
                 },
@@ -160,5 +171,34 @@ export class SchedulerComponent implements OnInit {
                     this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
                 }
             })
+    }
+
+    private fillAllEvents() {
+        this.events.forEach((event) => {
+            this.allEvents.push(event.meta)
+        })
+    }
+
+    private compareDates() {
+        let hasConflict = false
+        this.allEvents.forEach((event) => {
+            const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
+            if (formattedDate === this.payload.diaAgendamento && event.propriedadeId === this.payload.propriedadeId) {
+                console.log("Ja existe um agendamento nessa data hein")
+                hasConflict = true;
+            }
+        })
+        return hasConflict
+    }
+
+    private checkDoubleEvents() {
+        for (const event of this.allEvents) {
+            const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
+            if (formattedDate === this.payload.diaAgendamento && event.propriedadeId === this.payload.propriedadeId) {
+                console.log("Ja existe um agendamento nessa data hein")
+                return true
+            }
+        }
+        return false
     }
 }

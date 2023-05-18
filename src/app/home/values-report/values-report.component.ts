@@ -4,16 +4,9 @@ import moment from 'moment';
 import { AuthService } from 'src/app/auth.service';
 import { DialogService } from '../dialog.service';
 import { HomeService } from '../home.service';
-import { SnackService } from '../snack.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
-
-interface Event {
-    nome: string,
-    diaAgendamento: string,
-    logadouro: string,
-    valor: number
-}
+import { ReportClientData } from 'src/interfaces/client-report';
 
 @Component({
   selector: 'app-values-report',
@@ -22,19 +15,18 @@ interface Event {
 })
 export class ValuesReportComponent implements OnInit {
 
-    date: string = ""
-    clientName: string = ""
-    eventsDay: Event[] = []
-    total: number = 0
-    totalFirstQ: number = 0
-    totalLastQ: number = 0
+    date = ""
+    clientName = ""
+    eventsDay: ReportClientData[] = []
+    total = 0
+    totalFirstQ = 0
+    totalLastQ = 0
     
     constructor(
         public auth: AuthService,
-        private snack: SnackService,
         public homeService: HomeService,
         public dialogService: DialogService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: ReportClientData
     ) {}
 
     ngOnInit(): void {
@@ -52,14 +44,14 @@ export class ValuesReportComponent implements OnInit {
     }
 
     private configInfos() {
-        this.data.forEach((element: any) => {
+        this.data.forEach((element: ReportClientData) => {
             this.clientName = element.nome
             this.getQuarter(element.diaAgendamento,parseFloat(element.valor))
         });
     }
 
     private formatInfos() {
-        this.eventsDay = this.data.map((event: any) => {
+        this.eventsDay = this.data.map((event: ReportClientData) => {
             return {
                 ...event,
                 diaAgendamento: moment(event.diaAgendamento).add(3, "hours").format("DD/MM/YYYY")
@@ -68,7 +60,7 @@ export class ValuesReportComponent implements OnInit {
     }
     
     private getQuarter(day: string, value: number) {
-        let convertedDay = this.convertDate(day)
+        const convertedDay = this.convertDate(day)
         if (convertedDay.getDate() <= 15) {
             this.totalFirstQ += value
         } else {
@@ -78,7 +70,7 @@ export class ValuesReportComponent implements OnInit {
     }
     
     private convertDate(day: string) {
-        let convertedDay = new Date(day)
+        const convertedDay = new Date(day)
         convertedDay.setHours(convertedDay.getHours() + 3)
 
         return convertedDay

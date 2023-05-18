@@ -1,11 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CalendarEvent } from 'angular-calendar';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { DialogService } from '../dialog.service';
-import { EditorComponent } from '../editor/editor.component';
 import { HomeService } from '../home.service';
-import { SnackService } from '../snack.service';
+import { CompleteEventData } from 'src/interfaces/complete-event-data';
+
 
 @Component({
     selector: 'app-scheduling',
@@ -14,15 +13,14 @@ import { SnackService } from '../snack.service';
 })
 export class SchedulingComponent implements OnInit {
 
-    public fullAddress: string = ""
-    public checkin: string = ""
-    public checkout: string = ""
+    public fullAddress = ""
+    public checkin = ""
+    public checkout = ""
 
     constructor(
-        private snack: SnackService,
         public homeService: HomeService,
         public dialogService: DialogService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: CompleteEventData
     ) { }
 
     ngOnInit(): void {
@@ -41,7 +39,6 @@ export class SchedulingComponent implements OnInit {
         if (!moment(currentDate, "DD/MM/YYYY", true).isValid()) {
             const validDate = moment(this.data.diaAgendamento).add(3, "hours")
             this.data.diaAgendamento = validDate.format("DD/MM/YYYY")
-            console.log(this.data.diaAgendamento)
         }
     }
 

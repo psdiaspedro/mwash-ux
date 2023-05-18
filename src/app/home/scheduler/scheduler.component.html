@@ -27,23 +27,9 @@
                 </mat-option>
             </mat-autocomplete>
         </mat-form-field>
-        <!-- <mat-radio-group formControlName="checkout">
-            <mat-radio-button value="10:00">10:00</mat-radio-button>
-            <mat-radio-button value="11:00">11:00</mat-radio-button>
-            <mat-radio-button value="12:00">12:00</mat-radio-button>
-            <mat-radio-button value="13:00">13:00</mat-radio-button>
-            <mat-radio-button value="14:00">14:00</mat-radio-button>
-        </mat-radio-group> -->
         <mat-form-field appearance="fill">
             <mat-label>Checkout</mat-label>
             <mat-hint>Agendamentos para o dia seguinte: até 17h00</mat-hint>
-            <!-- <input 
-            matInput 
-            formControlName="checkout"
-            mask="00:00"
-            [dropSpecialCharacters]="false"
-            placeholder="Horario do checkout HH:mm"
-            > -->
             <mat-select formControlName="checkout">
                 <mat-option value="10:00">10:00</mat-option>
                 <mat-option value="11:00">11:00</mat-option>
@@ -57,16 +43,6 @@
             <mat-radio-button class="example-margin" value="16:00">Sim</mat-radio-button>
             <mat-radio-button class="example-margin" value="">Não </mat-radio-button>
         </mat-radio-group>
-<!--         <mat-form-field appearance="fill">
-            <mat-label>Checkin</mat-label>
-            <input 
-            matInput 
-            formControlName="checkin"
-            mask="00:00"
-            [dropSpecialCharacters]="false"
-            placeholder="Horario do checkin HH:mm"
-            >
-        </mat-form-field> -->
         <mat-form-field appearance="fill">
             <mat-label>Observações</mat-label>
             <input matInput formControlName="obs">

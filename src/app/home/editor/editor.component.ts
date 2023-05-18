@@ -1,14 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Agendamento } from "./agendamento"
+import { Component, Inject } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { HomeService } from '../home.service';
 import { DialogService } from '../dialog.service';
 import { SnackService } from '../snack.service';
-import { map, Observable, startWith } from 'rxjs';
-import { Property } from "../property"
 import { AuthService } from 'src/app/auth.service';
+import { CompleteEventData } from 'src/interfaces/complete-event-data';
+import { EventData } from 'src/interfaces/event';
 
 @Component({
   selector: 'app-editor',
@@ -25,17 +24,14 @@ export class EditorComponent {
         obs: new FormControl(),
     })
 
-    private payload: Agendamento = {}
-
-    public properties: Array<Property> = []
-    public filteredOptions: Observable<any> = new Observable()
+    private payload: EventData = {}
     
     constructor(
         public auth: AuthService,
         private snack: SnackService,
         public homeService: HomeService,
         public dialogService: DialogService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: CompleteEventData
     ) {}
 
     public getFormValue() {
@@ -86,12 +82,12 @@ export class EditorComponent {
     private editEvent() {
         this.homeService.editEvent(this.data.agendamentoId, this.payload)
             .subscribe({
-                next: (response) => {
+                next: () => {
                     this.snack.openWarningSnack("Agendamento editado com sucesso")
                     this.dialogService.closeEditorDialog()
                     this.dialogService.closeSchedulingDialog()
                 },
-                error: (error) => {
+                error: () => {
                     this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
                 }
             })
