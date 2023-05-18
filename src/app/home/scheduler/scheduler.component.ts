@@ -66,10 +66,6 @@ export class SchedulerComponent implements OnInit {
                     return address ? this._filter(address as string) : this.properties.slice()
                 })
             )
-        // this.allEvents.forEach((event) => {
-        //     const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
-        //     console.log(formattedDate)
-        // })
     }
 
     private checkTimeLimit(): boolean {
@@ -113,11 +109,10 @@ export class SchedulerComponent implements OnInit {
         if (this.createEventForm.value.obs) {
             this.payload.obs = this.createEventForm.value.obs
         }
-        if (this.compareDates()) {
-            this.snack.openTimeErrorSnack("Ja existe um agendameto par a propriedade e data escolhida")
+        if (this.checkDoubleEvents()) {
+            this.snack.openTimeErrorSnack("Ja existe um agendameto para a propriedade e data selecionadas")
             return
         }
-        this.checkDoubleEvents()
         this.createEvent()
     }
 
@@ -179,23 +174,10 @@ export class SchedulerComponent implements OnInit {
         })
     }
 
-    private compareDates() {
-        let hasConflict = false
-        this.allEvents.forEach((event) => {
-            const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
-            if (formattedDate === this.payload.diaAgendamento && event.propriedadeId === this.payload.propriedadeId) {
-                console.log("Ja existe um agendamento nessa data hein")
-                hasConflict = true;
-            }
-        })
-        return hasConflict
-    }
-
     private checkDoubleEvents() {
         for (const event of this.allEvents) {
             const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
             if (formattedDate === this.payload.diaAgendamento && event.propriedadeId === this.payload.propriedadeId) {
-                console.log("Ja existe um agendamento nessa data hein")
                 return true
             }
         }
