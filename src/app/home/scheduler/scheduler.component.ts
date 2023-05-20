@@ -52,6 +52,7 @@ export class SchedulerComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        //fazer chamada de eventos
         this.fillAllEvents()
         if (this.auth.isAdmin) {
             this.getAllProperties()

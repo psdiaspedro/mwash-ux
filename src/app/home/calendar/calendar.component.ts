@@ -24,6 +24,7 @@ export class CalendarComponent implements OnInit {
     viewMode: CalendarView = window.innerWidth <= 768 ? CalendarView.Day : CalendarView.Week 
     viewDate: Date = new Date();
     events: CalendarEvent[] = []
+    checkDoubleEvents: CalendarEvent[] = []
     viewButton = this.viewMode
     refresh = true
     totalEventsToday = 0
@@ -201,6 +202,8 @@ export class CalendarComponent implements OnInit {
     }
 
     public onCreateEvent() {
+        this.checkCurrentMonth()
+        console.log(this.events)
         this.dialogService.openSchedulerDialog(this.events)
     }
 }   
