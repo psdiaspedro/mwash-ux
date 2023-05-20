@@ -239,8 +239,8 @@ export class HomeService {
 
         if (color >= 300 && color <= 399) {
             return {
-                primary: "#002395", //borda
-                secondary: "#002395", //background
+                primary: "#4287f5", //borda
+                secondary: "#4287f5", //background
                 secondaryText: "#000000" //texto
             }
         }
@@ -267,7 +267,7 @@ export class HomeService {
             secondaryText: "#000000" //texto
         }
     }
-}
+}   
 
 // primary: string;
 // secondary: string;   
