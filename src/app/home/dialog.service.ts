@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { EditorComponent } from './editor/editor.component';
 import { ReportComponent } from './report/report.component';
@@ -22,6 +22,7 @@ export class DialogService {
     private reportDialogRef?:  MatDialogRef<ReportComponent>
     private valuesDialogRef?: MatDialogRef<ValuesReportComponent>
 
+
     constructor(
         private dialog: MatDialog,
     ) {}
@@ -34,7 +35,7 @@ export class DialogService {
         this.editorDialogRef = this.dialog.open(EditorComponent, { data })        
     }
 
-    public openSchedulerDialog(data?: CalendarEvent[]) {
+    public openSchedulerDialog(data?: Date) {
         this.schedulerDialogRef = this.dialog.open(SchedulerComponent, { data })
     }
 

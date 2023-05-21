@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { DialogService } from '../dialog.service';
 import { HomeService } from '../home.service';
 import { Property } from "../../../interfaces/property"
-import { map, Observable, startWith } from 'rxjs';
+import { forkJoin, map, Observable, startWith } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 import { SnackService } from '../snack.service';
 import { EventData } from 'src/interfaces/event';
@@ -41,19 +41,18 @@ export class SchedulerComponent implements OnInit {
     private properties: Array<Property> = []
     public filteredOptions: Observable<Property[]> = new Observable()
     public allEvents: CompleteEventData[] = []
-
+    public fullEvents: CalendarEvent[] = []
 
     constructor(
         private snack: SnackService,
         public auth: AuthService,
         public homeService: HomeService,
         public dialogService: DialogService,
-        @Inject(MAT_DIALOG_DATA) public events: CalendarEvent[]
+        @Inject(MAT_DIALOG_DATA) public viewDate: Date
     ) { }
 
     ngOnInit(): void {
-        //fazer chamada de eventos
-        this.fillAllEvents()
+        this.getFullEvents()
         if (this.auth.isAdmin) {
             this.getAllProperties()
         } else {
@@ -170,7 +169,7 @@ export class SchedulerComponent implements OnInit {
     }
 
     private fillAllEvents() {
-        this.events.forEach((event) => {
+        this.fullEvents.forEach((event) => {
             this.allEvents.push(event.meta)
         })
     }
@@ -179,9 +178,60 @@ export class SchedulerComponent implements OnInit {
         for (const event of this.allEvents) {
             const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
             if (formattedDate === this.payload.diaAgendamento && event.propriedadeId === this.payload.propriedadeId) {
+                console.log(this.payload)
+                console.log(event)
                 return true
             }
         }
         return false
+    }
+
+    private getFullEvents() {
+        const thisDate = moment(this.viewDate);
+        const nextDate = thisDate.clone().add(1, "month");
+
+        this.searchEvents(thisDate.year(), thisDate.format("MM"), nextDate.year(), nextDate.format("MM"));
+    }
+
+    private searchEvents(firstYear: number, firstMonth: string, secondYear: number, secondMonth: string) {
+        if (this.auth.isAdmin) {
+            this.getAllEventsDoubleMonth(firstYear, firstMonth, secondYear, secondMonth);
+        } else {
+            this.getMyEventsDoubleMonth(firstYear, firstMonth, secondYear, secondMonth);
+        }
+    }
+
+    private getAllEventsDoubleMonth(firstYear: number, firstMonth: string, secondYear: number, secondMonth: string) {
+        forkJoin([
+            this.homeService.getAllEvents(firstYear, firstMonth),
+            this.homeService.getAllEvents(secondYear, secondMonth)
+        ]).subscribe({
+            next: res => {
+                this.fullEvents = this.mergeEvents(res[0], res[1])
+                this.fillAllEvents()
+            },
+            error: () => {
+                this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
+            }
+        })
+    }
+
+    private getMyEventsDoubleMonth(firstYear: number, firstMonth: string, secondYear: number, secondMonth: string) {
+        forkJoin([
+            this.homeService.getMyEvents(firstYear, firstMonth),
+            this.homeService.getMyEvents(secondYear, secondMonth)
+        ]).subscribe({
+            next: res => {
+                this.fullEvents = this.mergeEvents(res[0], res[1])
+                this.fillAllEvents()
+            },
+            error: () => {
+                this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
+            }
+        })
+    }
+
+    private mergeEvents(firstEvents: Array<CalendarEvent>, secondEvents: CalendarEvent[]): CalendarEvent[] {
+        return [...firstEvents, ...secondEvents]
     }
 }

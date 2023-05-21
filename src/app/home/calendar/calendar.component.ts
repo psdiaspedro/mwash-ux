@@ -96,6 +96,7 @@ export class CalendarComponent implements OnInit {
         this.refresh = false
     }
 
+
     private getEvents(firstYear: number, firstMonth: string, secondYear?: number, secondMonth?: string) {
         if (this.auth.isAdmin) {
             if (arguments.length <= 2 || typeof secondYear === "undefined" || typeof secondMonth === "undefined") {
@@ -203,7 +204,6 @@ export class CalendarComponent implements OnInit {
 
     public onCreateEvent() {
         this.checkCurrentMonth()
-        console.log(this.events)
-        this.dialogService.openSchedulerDialog(this.events)
+        this.dialogService.openSchedulerDialog(this.viewDate)
     }
 }   
