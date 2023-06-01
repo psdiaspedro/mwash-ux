@@ -57,10 +57,13 @@ export class HomeService {
                         if (event.obs) {
                             icon = "&#x26A0;&#xFE0F;"
                         }
+                        if (event.proprietarioid == 1 || event.proprietarioid == 2 || event.proprietarioid == 5) {
+                            console.log(event)
+                        }
                         return {
                             title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
                             start: this.convertUniversalDate(event.diaAgendamento, event.checkout),
-                            color: this.getColor(event.cor),
+                            color: this.colorateAll(event.proprietarioid),
                             meta: event
                         }
                     })
@@ -87,6 +90,7 @@ export class HomeService {
                         return {
                             title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
                             start: this.convertUniversalDate(event.diaAgendamento, event.checkout),
+                            color: this.myColorate(),
                             meta: event
                         }
                     })
@@ -211,60 +215,62 @@ export class HomeService {
         )
     }
 
-    private getColor(color: number) {
-
-        if (color >= 1 && color <= 99) {
-            return {
-                primary: "#ffd300", //borda
-                secondary: "#ffd300", //background
-                secondaryText: "#000000" //texto
-            }
+    private colorateAll(clientId: number) {
+        switch (clientId) {
+            case 3:
+                return {
+                    primary: "#C5D9AB",
+                    secondary: "#C5D9AB",
+                    secondaryText: "#000000"
+                }
+            case 4:
+                return {
+                    primary: "#FFCC9C",
+                    secondary: "#FFCC9C",
+                    secondaryText: "#000000"
+                }
+            case 6:
+                return {
+                    primary: "#B199BF",
+                    secondary: "#B199BF",
+                    secondaryText: "#000000"
+                };
+            case 7:
+                return {
+                    primary: "#E6AFC3",
+                    secondary: "#E6AFC3",
+                    secondaryText: "#000000"
+                }
+            case 8:
+                return {
+                    primary: "#ACD3E8",
+                    secondary: "#ACD3E8",
+                    secondaryText: "#000000"
+                }
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 19:
+                return {
+                    primary: "#7B86B3",
+                    secondary: "#7B86B3",
+                    secondaryText: "#000000"
+                }
+            default:
+                return {
+                    primary: "#D1D1D1",
+                    secondary: "#D1D1D1", 
+                    secondaryText: "#000000"
+                }
         }
+    }
 
-        if (color >= 100 && color <= 199) {
-            return {
-                primary: "#2e8b57", //borda
-                secondary: "#2e8b57", //background
-                secondaryText: "#000000" //texto
-            }
-        }
-
-        if (color >= 200 && color <= 299) {
-            return {
-                primary: "#ff4040", //borda
-                secondary: "#ff4040", //background
-                secondaryText: "#000000" //texto
-            }
-        }
-
-        if (color >= 300 && color <= 399) {
-            return {
-                primary: "#4287f5", //borda
-                secondary: "#4287f5", //background
-                secondaryText: "#000000" //texto
-            }
-        }
-
-        if (color >= 400 && color <= 499) {
-            return {
-                primary: "#2e8b57", //borda
-                secondary: "#2e8b57", //background
-                secondaryText: "#000000" //texto
-            }
-        }
-
-        if (color >= 500 && color <= 599) {
-            return {
-                primary: "#2e8b57", //borda
-                secondary: "#2e8b57", //background
-                secondaryText: "#000000" //texto
-            }
-        }
-
+    private myColorate() {
         return {
-            primary: "#2e8b57", //borda
-            secondary: "#2e8b57", //background
-            secondaryText: "#000000" //texto
+            primary: "#ACD3E8",
+            secondary: "#ACD3E8",
+            secondaryText: "#000000"
         }
     }
 }   
@@ -272,13 +278,6 @@ export class HomeService {
 // primary: string;
 // secondary: string;   
 // secondaryText?: string;
-
-// 1 - 99 -> Centro - AMARELO - #ffdf00
-// 100 - 199 -> Zona Leste
-// 200 - 299 -> ZOna Sul
-// 300 - 399 -> Zona Oeste
-// 400 - 499 -> Zona Norte
-// 500 - 599 -> ZOna Oeste
 
 //event.checkout == 11:00:00
 //dia.agendamento == 2023-04-28T00:00:00Z
