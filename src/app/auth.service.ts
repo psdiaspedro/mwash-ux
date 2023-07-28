@@ -14,6 +14,11 @@ export class AuthService {
         private http: HttpClient
     ) { }
 
+    get userId() {
+        const userID = parseInt(localStorage.getItem("userID") || "")
+        return userID
+    }
+
     get decodeToken() {
         const payload = this.accessToken?.split(".")[1] || ""
         if (!payload) return null
@@ -69,5 +74,16 @@ export class AuthService {
                 })
             })
         )
+    }
+
+    public hasReportAccess() {
+        const id = this.userId
+        switch(id) {
+            case 2:
+            case 5:
+                return false
+            default:
+                return true
+        }
     }
 }

@@ -1,6 +1,10 @@
 <app-toolbar></app-toolbar>
 <app-calendar></app-calendar>
-<button class="report" mat-fab color="primary" title="report" (click)="onReport()">
+<button class="report" 
+        mat-fab color="primary" 
+        title="report" 
+        (click)="onReport()"
+        *ngIf="isAccountant">
     <mat-icon>
         account_balance
     </mat-icon>

@@ -7,7 +7,7 @@
             Data
         </div>
         <div>
-            Rua
+            Propriedade
         </div>
         <div>
             Valor
@@ -19,6 +19,8 @@
         </div>
         <div class="street">
             {{event.logadouro}}
+            -
+            {{event.complemento}}
         </div>
         <div>
             {{event.valor | currency: "BRL"}}
