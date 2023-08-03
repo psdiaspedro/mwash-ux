@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>
+   Programação: {{tomorrow}}
+</h1>
+<main mat-dialog-content>
+    <div *ngFor="let cliente of groupedByClient | keyvalue">
+        <h2>{{ cliente.key }}</h2>
+        <div *ngFor="let checkout of cliente.value | keyvalue">
+            <h3>Out {{formatedCheckout(checkout.key) }}</h3>
+            <ul>
+            <li *ngFor="let evento of checkout.value">
+                <p>{{ nonShowApto(evento.meta.complemento) }}, {{evento.meta.bairro}}
+                <span *ngIf="hasCheckin(evento.meta.checkin)">(IN)</span>
+                </p>
+            </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<footer mat-dialog-actions class="actions">
+    <button mat-raised-button color="primary" (click)="copyContent()">
+        <mat-icon>
+            content_copy
+        </mat-icon>
+            &nbsp;Copiar
+    </button>
+    <button mat-raised-button (click)="dialogService.closeChecklistDialog()">
+        <mat-icon>
+            reply
+        </mat-icon>
+            &nbsp;Voltar
+    </button>
+</footer>

@@ -19,6 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReportComponent } from './report/report.component';
 import { ValuesReportComponent } from './values-report/values-report.component';
+import { ChecklistComponent } from './checklist/checklist.component';
+import {ClipboardModule} from "ngx-clipboard"
 
 export function momentAdapterFactory() {
     return adapterFactory(moment);
@@ -34,7 +36,8 @@ export function momentAdapterFactory() {
         ConfirmationComponent,
         ReportComponent,
         ValuesReportComponent,
-        HomeComponent
+        HomeComponent,
+        ChecklistComponent
     ],
     imports: [
         CommonModule,
@@ -45,7 +48,8 @@ export function momentAdapterFactory() {
         NgxMaskDirective,
         MatDialogModule,
         HttpClientModule,
-        NgbModalModule
+        NgbModalModule,
+        ClipboardModule
     ],
     providers: [
         provideNgxMask()

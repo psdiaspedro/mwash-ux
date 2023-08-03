@@ -212,9 +212,14 @@ let-dragEnter="dragEnter"
     </mwl-calendar-day-view>
 </main>
 <footer>
-    <button class="createEvent" mat-fab color="primary" title="logout" (click)="onCreateEvent()">
+    <button class="createEvent" mat-fab color="primary" title="add event" (click)="onCreateEvent()">
         <mat-icon>
             add
         </mat-icon>
-    </button>    
+    </button>
+    <button class="generateReport" mat-fab color="primary" title="checklist" (click)="onCheckList()">
+        <mat-icon>
+            checklist
+        </mat-icon>
+    </button>
 </footer>

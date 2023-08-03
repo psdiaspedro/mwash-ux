@@ -103,6 +103,63 @@ export class HomeService {
         )
     }
 
+    public getAllEventsByDay(year: number, month: string, day: string) {
+        return this.http.get<Array<CompleteEventData>>(`${environment.API}/agendamentos/${year}-${month}-${day}`, {
+            headers: this.authService.defaultHeaders
+        }).pipe(
+            map((events: CompleteEventData[]) => {
+                if (events) {
+                    return events.map((event: CompleteEventData) => {
+                        let icon = ""
+                        if (event.obs) {
+                            icon = "&#x26A0;&#xFE0F;"
+                        }
+                        if (event.proprietarioid == 1 || event.proprietarioid == 2 || event.proprietarioid == 5) {
+                            console.log(event)
+                        }
+                        return {
+                            title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
+                            start: this.convertUniversalDate(event.diaAgendamento, event.checkout),
+                            color: this.colorateAll(event.proprietarioid),
+                            meta: event
+                        }
+                    })
+                }
+                return []
+            }),
+            catchError(error => {
+                return throwError(() => error)
+            })
+        )
+    }
+
+    // public getMyEventsByDay(year: number, month: string, day: string) {
+    //     return this.http.get<Array<CompleteEventData>>(`${environment.API}/agendamentos/usuario/${year}-${month}-${day}`, {
+    //         headers: this.authService.defaultHeaders
+    //     }).pipe(
+    //         map((events: CompleteEventData[]) => {
+    //             if (events) {
+    //                 return events.map((event: CompleteEventData) => {
+    //                     let icon = ""
+    //                     if (event.obs) {
+    //                         icon = "<mat-icon>add</mat-icon>"
+    //                     }
+    //                     return {
+    //                         title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
+    //                         start: this.convertUniversalDate(event.diaAgendamento, event.checkout),
+    //                         color: this.myColorate(),
+    //                         meta: event
+    //                     }
+    //                 })
+    //             }
+    //             return []
+    //         }),
+    //         catchError(error => {
+    //             return throwError(() => error)
+    //         })
+    //     )
+    // }
+
     public getAllProperties() {
         return this.http.get<Array<Property>>(`${environment.API}/todas_propriedades`, {
             headers: this.authService.defaultHeaders
