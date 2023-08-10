@@ -38,6 +38,7 @@
     "luxon": "^3.2.1",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
+    "ngx-clipboard": "^16.0.0",
     "ngx-mask": "^15.0.2",
     "ngx-material-timepicker": "^5.5.2",
     "rxjs": "~7.8.0",

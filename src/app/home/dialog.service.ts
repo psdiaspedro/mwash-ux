@@ -9,6 +9,7 @@ import { ValuesReportComponent } from './values-report/values-report.component';
 import { CompleteEventData } from 'src/interfaces/complete-event-data';
 import { ReportClientData } from 'src/interfaces/client-report';
 import { CalendarEvent } from 'angular-calendar';
+import { ChecklistComponent } from './checklist/checklist.component';
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +22,7 @@ export class DialogService {
     private confirmationDialogRef?:  MatDialogRef<ConfirmationComponent>
     private reportDialogRef?:  MatDialogRef<ReportComponent>
     private valuesDialogRef?: MatDialogRef<ValuesReportComponent>
+    private checklistDialogRef?: MatDialogRef<ChecklistComponent>
 
 
     constructor(
@@ -51,6 +53,11 @@ export class DialogService {
         this.valuesDialogRef = this.dialog.open(ValuesReportComponent, { data })
     }
 
+    public openCheckListDialog(data?: CalendarEvent[]) {
+        this.checklistDialogRef = this.dialog.open(ChecklistComponent, { data })
+        this.checklistDialogRef.updateSize('500px', '')
+    }
+
     public closeSchedulingDialog() {
         this.schedulinDialogRef?.close()
     }
@@ -73,5 +80,9 @@ export class DialogService {
 
     public closeValuesDialog() {
         this.valuesDialogRef?.close()
+    }
+
+    public closeChecklistDialog() {
+        this.checklistDialogRef?.close()
     }
 }

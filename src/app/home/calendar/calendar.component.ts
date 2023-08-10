@@ -24,6 +24,7 @@ export class CalendarComponent implements OnInit {
     viewMode: CalendarView = window.innerWidth <= 768 ? CalendarView.Day : CalendarView.Week 
     viewDate: Date = new Date();
     events: CalendarEvent[] = []
+    tomorrowEvents: CalendarEvent[] = []
     checkDoubleEvents: CalendarEvent[] = []
     viewButton = this.viewMode
     refresh = true
@@ -37,7 +38,6 @@ export class CalendarComponent implements OnInit {
         private dialogService: DialogService,
         public homeService: HomeService,
         public auth: AuthService,
-        private modal: NgbModal, 
         private dateAdapter: DateAdapter
     ) {}
 
@@ -99,6 +99,7 @@ export class CalendarComponent implements OnInit {
 
     private getEvents(firstYear: number, firstMonth: string, secondYear?: number, secondMonth?: string) {
         if (this.auth.isAdmin) {
+            this.getAllTomorrowEvents()
             if (arguments.length <= 2 || typeof secondYear === "undefined" || typeof secondMonth === "undefined") {
                 this.getAllEvents()
             } else {
@@ -140,6 +141,22 @@ export class CalendarComponent implements OnInit {
                 this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
             }
         })
+    }
+
+    private getAllTomorrowEvents() {
+        const ano = this.viewDate.getFullYear()
+        const mes = (this.viewDate.getMonth() + 1).toString().padStart(2, "0")
+        const dia = moment().add(1, 'day').format('DD');
+
+        this.homeService.getAllEventsByDay(ano, mes, dia)
+            .subscribe( {
+                next: (events: Array<CalendarEvent>) => {
+                    this.tomorrowEvents = events
+                },
+                error: () => {
+                    this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
+                }
+            })
     }
 
     private getMyEvents() {
@@ -205,5 +222,10 @@ export class CalendarComponent implements OnInit {
     public onCreateEvent() {
         this.checkCurrentMonth()
         this.dialogService.openSchedulerDialog(this.viewDate)
+    }
+
+    public onCheckList() {
+        this.checkCurrentMonth()
+        this.dialogService.openCheckListDialog(this.tomorrowEvents)
     }
 }   
