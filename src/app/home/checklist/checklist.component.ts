@@ -75,6 +75,12 @@ export class ChecklistComponent implements OnInit{
         return checkin !== '00:00:00';
     }
 
+    hasObs(obs: string): boolean {
+        if (obs != undefined)
+            return true
+        return false
+    }
+
     nonShowApto(complemento: string): string {
         return complemento.replace(/^apto\s*/i, '');
     }
@@ -100,6 +106,10 @@ export class ChecklistComponent implements OnInit{
 
                             if (this.hasCheckin(evento.meta.checkin))
                                 this.contentToCopy += " (IN)"
+
+                            if (evento.meta.obs) {
+                                this.contentToCopy += ` - ${evento.meta.obs}`
+                            }
 
                             this.contentToCopy += "\n"
                         }
