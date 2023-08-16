@@ -30,6 +30,7 @@ export class CalendarComponent implements OnInit {
     refresh = true
     totalEventsToday = 0
     hideButton = false
+    isAdmin = true
 
     private currentMonth: Date = new Date()
 

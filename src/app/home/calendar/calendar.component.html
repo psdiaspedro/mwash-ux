@@ -217,7 +217,7 @@ let-dragEnter="dragEnter"
             add
         </mat-icon>
     </button>
-    <button class="generateReport" mat-fab color="primary" title="checklist" (click)="onCheckList()">
+    <button class="generateReport" mat-fab color="primary" title="checklist" (click)="onCheckList()" *ngIf="auth.isAdmin">
         <mat-icon>
             checklist
         </mat-icon>
