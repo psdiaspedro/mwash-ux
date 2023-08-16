@@ -10,6 +10,7 @@
             <li *ngFor="let evento of checkout.value">
                 <p>{{ nonShowApto(evento.meta.complemento) }}, {{evento.meta.bairro}}
                 <span *ngIf="hasCheckin(evento.meta.checkin)">(IN)</span>
+                <span *ngIf="hasObs(evento.meta.obs)"> - {{evento.meta.obs}}</span>
                 </p>
             </li>
             </ul>
