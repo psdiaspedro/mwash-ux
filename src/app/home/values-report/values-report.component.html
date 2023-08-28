@@ -2,51 +2,55 @@
     {{clientName}} - {{date}}
 </h1>
 <main mat-dialog-content>
-    <div class="container-report header">
-        <div>
+    <div class="header">
+        <div class="container-report header-cell">
             Data
         </div>
-        <div>
+        <div class="container-report header-cell">
             Propriedade
         </div>
-        <div>
+        <div class="container-report header-cell">
+            Complemento
+        </div>
+        <div class="container-report header-cell">
             Valor
         </div>
     </div>
     <div class="container-report" *ngFor="let event of eventsDay">
-        <div>
+        <div class="container-report cell">
             {{event.diaAgendamento}}
         </div>
-        <div class="street">
+        <div class="container-report cell">
             {{event.logadouro}}
-            -
+        </div>
+        <div class="container-report cell">
             {{event.complemento}}
         </div>
-        <div>
+        <div class="container-report cell">
             {{event.valor | currency: "BRL"}}
         </div>
     </div>
     <div class="container-report total total-f">
-        <div>
+        <div class="container-report total-cell">
             Total
         </div>
-        <div>
+        <div class="container-report total-cell">
             {{total | currency: "BRL"}}
         </div>
     </div>
     <div class="container-report total">
-        <div>
+        <div class="container-report total-cell">
             1º Quinzena
         </div>
-        <div>
+        <div class="container-report total-cell">
             {{totalFirstQ | currency: "BRL"}}
         </div>
     </div>
     <div class="container-report total">
-        <div>
+        <div class="container-report total-cell">
             2º Quinzena
         </div>
-        <div>
+        <div class="container-report total-cell">
             {{totalLastQ | currency: "BRL"}}
         </div>
     </div>

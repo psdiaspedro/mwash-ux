@@ -1,7 +1,7 @@
 export interface ReportClientData {
     diaAgendamento: string
     logadouro: string
-    complemento?: number
+    complemento: string
     nome: string
     valor: string
     map<T>(callbackfn: (value: ReportClientData) => T): T[]

@@ -82,12 +82,13 @@ export class ValuesReportComponent implements OnInit {
         const img = "assets/img/logo.png"
         doc.addImage(img, "PNG", 80, 10, 50, 40)
 
-        const tableHeaders = [['Dia Agendamento', 'Logadouro', 'Valor']];
+        const tableHeaders = [['Dia Agendamento', 'Logradouro', 'Valor']];
 
         const tableData = this.eventsDay.map(event => {
             const value = event.valor.toString()
             const currencyValue = parseFloat(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-            return ([event.diaAgendamento, event.logadouro, currencyValue])
+            const logadouro = `${event.logadouro} - ${event.complemento}`
+            return ([event.diaAgendamento, logadouro, currencyValue])
         })
 
         const total = Array(tableHeaders[0].length - 1).fill("")
