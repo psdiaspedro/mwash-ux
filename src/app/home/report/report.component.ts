@@ -81,7 +81,7 @@ export class ReportComponent implements OnInit {
         return user.nome === nome;
       });
       const date = moment(this.date.value).format("YYYY-MM")
-  
+
       if (user) {
         this.getClientValues(user.id, date)
       } else {
@@ -109,6 +109,7 @@ export class ReportComponent implements OnInit {
     this.homeService.getClientValues(userId, date).subscribe({
         next: (response: object) => {
           const res = response as ReportClientData[]
+          console.log(res)
           this.clientsValues = res
             if (this.clientsValues && this.clientsValues.length !== 0 ) {
                 this.dialogService.openValuesDialog(this.clientsValues)

@@ -51,6 +51,7 @@ export class DialogService {
 
     public openValuesDialog(data?: ReportClientData[]) {
         this.valuesDialogRef = this.dialog.open(ValuesReportComponent, { data })
+        this.valuesDialogRef.updateSize('800px', '')
     }
 
     public openCheckListDialog(data?: CalendarEvent[]) {

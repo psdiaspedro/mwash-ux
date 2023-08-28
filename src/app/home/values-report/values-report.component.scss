@@ -18,6 +18,7 @@ table {
 .container-report {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .header {
@@ -43,4 +44,59 @@ table {
 .street {
     margin-left: 30px;
     margin-right: 30px;
+}
+
+/* Estilos gerais */
+.main {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+/* Estilos para o cabeçalho da tabela */
+.header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f0f0f0;
+    font-weight: bold;
+    padding: 10px;
+}
+
+/* Estilos para as células do cabeçalho da tabela */
+.header-cell {
+    flex: 1;
+    padding: 5px;
+}
+
+/* Estilos para as linhas de dados da tabela */
+.container-report {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // padding: 10px;
+}
+
+/* Estilos para as células de dados da tabela */
+.cell {
+    flex: 1;
+    padding: 5px;
+}
+
+/* Estilos para as linhas de totais */
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    font-weight: bold;
+}
+
+/* Estilos para as células de totais */
+.total-cell {
+    flex: 1;
+    padding: 5px;
+}
+
+/* Estilos para a linha de total final */
+.total-f {
+    background-color: #f0f0f0;
 }
