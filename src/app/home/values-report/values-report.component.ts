@@ -7,6 +7,8 @@ import { HomeService } from '../home.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import { ReportClientData } from 'src/interfaces/client-report';
+import * as Papa from 'papaparse';
+
 
 @Component({
   selector: 'app-values-report',
@@ -84,6 +86,7 @@ export class ValuesReportComponent implements OnInit {
 
         const tableHeaders = [['Dia Agendamento', 'Logradouro', 'Valor']];
 
+        console.log(this.eventsDay)
         const tableData = this.eventsDay.map(event => {
             const value = event.valor.toString()
             const currencyValue = parseFloat(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -107,5 +110,32 @@ export class ValuesReportComponent implements OnInit {
         });
         
         doc.save("relatório.pdf")
-    } 
+    }
+
+    public generateCSV() {
+        // const csv = Papa.unparse(this.eventsDay);
+        // const blob = new Blob([csv], { type: 'text/csv' });
+        // const url = window.URL.createObjectURL(blob);
+        // const a = document.createElement('a');
+        // a.href = url;
+        // a.download = 'data.csv';
+        // a.click();
+        // window.URL.revokeObjectURL(url);
+
+        const csvHeader = ['Cliente', 'Data Limpeza', "Logradouro", "Complemento", "Valor"]; // Substitua pelos cabeçalhos corretos
+        const csvData = this.eventsDay.map(item => [item.nome, item.diaAgendamento, item.logadouro, item.complemento, item.valor]); // Substitua pelas propriedades corretas
+
+        const csv = Papa.unparse({
+            fields: csvHeader,
+            data: csvData,
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'data.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
 }
