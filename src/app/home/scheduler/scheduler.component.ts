@@ -81,6 +81,19 @@ export class SchedulerComponent implements OnInit {
         return false;
     }
 
+    private checkPastDate(): boolean {
+        const diaAgendamento = this.createEventForm.value.diaAgendamento;
+        console.log(diaAgendamento)
+        const date = moment(diaAgendamento, "ddd MMM DD YYYY HH:mm:ss ZZ");
+        const today = moment();
+    
+        // Verifica se a data do agendamento é anterior a hoje ou hoje
+        if (date.isBefore(today, 'day') || date.isSame(today, 'day')) {
+            return true;
+        }
+        return false;
+    }
+
     private _filter(value: string): Property[] {
         const filterValue = value.toLowerCase();
         return this.properties.filter(property => property.enderecoCompleto.toLowerCase().includes(filterValue));
@@ -98,6 +111,12 @@ export class SchedulerComponent implements OnInit {
         
         if (!this.auth.isAdmin && this.checkTimeLimit()) {
             this.snack.openTimeErrorSnack("O horário limite de agendamentos para o dia seguinte é 17h00, para emergencias favor contatar a administração")
+            return
+        }
+
+        // Verifica se é dia anterior ou hoje
+        if (!this.auth.isAdmin && this.auth.userId != 6 && this.checkPastDate()) {
+            this.snack.openTimeErrorSnack("Não é possível fazer um agendamento para a data selecionada")
             return
         }
 
@@ -177,9 +196,8 @@ export class SchedulerComponent implements OnInit {
     private checkDoubleEvents() {
         for (const event of this.allEvents) {
             const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
+            console.log(formattedDate, this.payload.diaAgendamento)
             if (formattedDate === this.payload.diaAgendamento && event.propriedadeId === this.payload.propriedadeId) {
-                console.log(this.payload)
-                console.log(event)
                 return true
             }
         }
