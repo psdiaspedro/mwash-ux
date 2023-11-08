@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { DialogService } from '../dialog.service';
@@ -42,6 +42,7 @@ export class SchedulerComponent implements OnInit {
     public filteredOptions: Observable<Property[]> = new Observable()
     public allEvents: CompleteEventData[] = []
     public fullEvents: CalendarEvent[] = []
+    locale: string = "";
 
     constructor(
         private snack: SnackService,

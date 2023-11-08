@@ -32,19 +32,26 @@ export class HomeService {
     }
 
     public convertUniversalDate(day: string, hour: string) {
-        const offset = this.getUserOffSet()
-        
-        const convertedDay = new Date(day)
-        if (offset < 0) {
-            convertedDay.setHours(convertedDay.getHours() + (offset * -1))
-        } else {
-            convertedDay.setHours(convertedDay.getHours() - offset)
-        }
-        const convertedHour = hour.split(":") 
-    
-        convertedDay.setHours(parseInt(convertedHour[0]), parseInt(convertedHour[1]))
-        return convertedDay
+        const offset = this.getUserOffSet();
+        const convertedDay = moment.tz(`${day} ${hour}`, 'YYYY-MM-DD HH:mm', moment.tz.guess());
+        const adjustedDay = convertedDay.utcOffset(offset, true);
+        return adjustedDay.toDate();
     }
+
+    // public convertUniversalDate(day: string, hour: string) {
+    //     const offset = this.getUserOffSet()
+        
+    //     const convertedDay = new Date(day)
+    //     if (offset < 0) {
+    //         convertedDay.setHours(convertedDay.getHours() + (offset * -1))
+    //     } else {
+    //         convertedDay.setHours(convertedDay.getHours() - offset)
+    //     }
+    //     const convertedHour = hour.split(":") 
+    
+    //     convertedDay.setHours(parseInt(convertedHour[0]), parseInt(convertedHour[1]))
+    //     return convertedDay
+    // }
 
     public getAllEvents(year: number, month: string) {
         return this.http.get<Array<CompleteEventData>>(`${environment.API}/agendamentos/${year}-${month}`, {
