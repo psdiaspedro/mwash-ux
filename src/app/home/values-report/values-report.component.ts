@@ -86,7 +86,6 @@ export class ValuesReportComponent implements OnInit {
 
         const tableHeaders = [['Dia Agendamento', 'Logradouro', 'Valor']];
 
-        console.log(this.eventsDay)
         const tableData = this.eventsDay.map(event => {
             const value = event.valor.toString()
             const currencyValue = parseFloat(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })

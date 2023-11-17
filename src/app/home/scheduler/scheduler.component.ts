@@ -12,6 +12,7 @@ import { CalendarEvent } from 'angular-calendar';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CompleteEventData } from 'src/interfaces/complete-event-data';
 
+
 @Component({
     selector: 'app-scheduler',
     templateUrl: './scheduler.component.html',
@@ -42,6 +43,7 @@ export class SchedulerComponent implements OnInit {
     public filteredOptions: Observable<Property[]> = new Observable()
     public allEvents: CompleteEventData[] = []
     public fullEvents: CalendarEvent[] = []
+    public todayEvents: CalendarEvent[] = []
     locale: string = "";
 
     constructor(
@@ -84,7 +86,6 @@ export class SchedulerComponent implements OnInit {
 
     private checkPastDate(): boolean {
         const diaAgendamento = this.createEventForm.value.diaAgendamento;
-        console.log(diaAgendamento)
         const date = moment(diaAgendamento, "ddd MMM DD YYYY HH:mm:ss ZZ");
         const today = moment();
     
@@ -109,7 +110,7 @@ export class SchedulerComponent implements OnInit {
             this.snack.openErrorSnack("Campos obrigatórios não preenchidos")
             return
         }
-        
+    
         if (!this.auth.isAdmin && this.checkTimeLimit()) {
             this.snack.openTimeErrorSnack("O horário limite de agendamentos para o dia seguinte é 17h00, para emergencias favor contatar a administração")
             return
@@ -129,11 +130,13 @@ export class SchedulerComponent implements OnInit {
         if (this.createEventForm.value.obs) {
             this.payload.obs = this.createEventForm.value.obs
         }
-        if (this.checkDoubleEvents()) {
-            this.snack.openTimeErrorSnack("Ja existe um agendameto para a propriedade e data selecionadas")
-            return
-        }
-        this.createEvent()
+
+        this.getTodayEvents()
+        // if (this.checkDoubleEvents()) {
+        //     this.snack.openTimeErrorSnack("Ja existe um agendameto para a propriedade e data selecionadas")
+        //     return
+        // }
+        //this.createEvent()
     }
 
     private formatTime() {
@@ -181,8 +184,6 @@ export class SchedulerComponent implements OnInit {
                     this.snack.openWarningSnack("Agendamento criado com sucesso")
                 },
                 error: (error) => {
-                    console.log(error)
-                    console.log(this.payload)
                     this.snack.openErrorSnack("Ocorreu um erro, tente novamente")
                 }
             })
@@ -194,15 +195,45 @@ export class SchedulerComponent implements OnInit {
         })
     }
 
-    private checkDoubleEvents() {
-        for (const event of this.allEvents) {
-            const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
-            console.log(formattedDate, this.payload.diaAgendamento)
-            if (formattedDate === this.payload.diaAgendamento && event.propriedadeId === this.payload.propriedadeId) {
-                return true
-            }
+    // private checkDoubleEvents() {
+    //     for (const event of this.allEvents) {
+    //         const formattedDate = moment(this.homeService.convertUniversalDate(event.diaAgendamento, event.checkout)).format("DD-MM-YYYY")
+    //         if (formattedDate === this.payload.diaAgendamento && event.propriedadeId === this.payload.propriedadeId) {
+    //             return true
+    //         }
+    //     }
+    //     return false
+    // }
+
+    private getTodayEvents() {
+        if (this.createEventForm.value.diaAgendamento) {
+            const diaAgendamento: moment.Moment = moment(this.createEventForm.value.diaAgendamento, "DD-MM-YYYY");
+        
+            const dia: string = diaAgendamento.format("DD");
+            const mes: string = diaAgendamento.format("MM");
+            const ano: number = parseInt(diaAgendamento.format("YYYY"), 10);
+            
+            this.homeService.getAllEventsByDay(ano, mes, dia)
+                .subscribe( {
+                    next: (events: Array<CalendarEvent>) => {
+                        this.todayEvents = events
+                        const propriedadeId = this.payload.propriedadeId;
+                        
+                        // Verifica se o evento já existe com o mesmo propriedadeId
+                        const eventoExistente = this.todayEvents.find(event => event.meta.propriedadeId === propriedadeId);
+                        console.log(eventoExistente)
+                        
+                        if (eventoExistente) {
+                            this.snack.openTimeErrorSnack("Já existe um agendamento para a propriedade e data selecionadas");
+                            return
+                        }
+                        this.createEvent()
+                    },
+                    error: () => {
+                        this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
+                    }
+                })
         }
-        return false
     }
 
     private getFullEvents() {
