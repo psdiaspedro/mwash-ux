@@ -149,7 +149,8 @@ export class CalendarComponent implements OnInit {
         const mes = (this.viewDate.getMonth() + 1).toString().padStart(2, "0")
         const dia = moment().add(1, 'day').format('DD');
 
-        this.homeService.getAllEventsByDay(ano, mes, dia)
+        if (this.auth.isAdmin) {
+            this.homeService.getAllEventsByDayAdmin(ano, mes, dia)
             .subscribe( {
                 next: (events: Array<CalendarEvent>) => {
                     this.tomorrowEvents = events
@@ -158,6 +159,18 @@ export class CalendarComponent implements OnInit {
                     this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
                 }
             })
+        } else {
+            this.homeService.getAllEventsByDay(ano, mes, dia)
+                .subscribe( {
+                    next: (events: Array<CalendarEvent>) => {
+                        this.tomorrowEvents = events
+                    },
+                    error: () => {
+                        this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
+                    }
+                })
+        }
+
     }
 
     private getMyEvents() {

@@ -212,27 +212,53 @@ export class SchedulerComponent implements OnInit {
             const dia: string = diaAgendamento.format("DD");
             const mes: string = diaAgendamento.format("MM");
             const ano: number = parseInt(diaAgendamento.format("YYYY"), 10);
+
             
-            this.homeService.getAllEventsByDay(ano, mes, dia)
-                .subscribe( {
-                    next: (events: Array<CalendarEvent>) => {
-                        this.todayEvents = events
-                        const propriedadeId = this.payload.propriedadeId;
-                        
-                        // Verifica se o evento já existe com o mesmo propriedadeId
-                        const eventoExistente = this.todayEvents.find(event => event.meta.propriedadeId === propriedadeId);
-                        console.log(eventoExistente)
-                        
-                        if (eventoExistente) {
-                            this.snack.openTimeErrorSnack("Já existe um agendamento para a propriedade e data selecionadas");
-                            return
+            if(this.auth.isAdmin) {
+                this.homeService.getAllEventsByDayAdmin(ano, mes, dia)
+                    .subscribe( {
+                        next: (events: Array<CalendarEvent>) => {
+                            this.todayEvents = events
+                            const propriedadeId = this.payload.propriedadeId;
+                            
+                            // Verifica se o evento já existe com o mesmo propriedadeId
+                            const eventoExistente = this.todayEvents.find(event => event.meta.propriedadeId === propriedadeId);
+                            console.log(eventoExistente)
+                            
+                            if (eventoExistente) {
+                                this.snack.openTimeErrorSnack("Já existe um agendamento para a propriedade e data selecionadas");
+                                return
+                            }
+                            this.createEvent()
+                        },
+                        error: () => {
+                            this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
                         }
-                        this.createEvent()
-                    },
-                    error: () => {
-                        this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
-                    }
-                })
+                    })
+            } else {
+                this.homeService.getAllEventsByDay(ano, mes, dia)
+                    .subscribe( {
+                        next: (events: Array<CalendarEvent>) => {
+                            this.todayEvents = events
+                            const propriedadeId = this.payload.propriedadeId;
+                            
+                            // Verifica se o evento já existe com o mesmo propriedadeId
+                            const eventoExistente = this.todayEvents.find(event => event.meta.propriedadeId === propriedadeId);
+                            console.log(eventoExistente)
+                            
+                            if (eventoExistente) {
+                                this.snack.openTimeErrorSnack("Já existe um agendamento para a propriedade e data selecionadas");
+                                return
+                            }
+                            this.createEvent()
+                        },
+                        error: () => {
+                            this.snack.openErrorSnack("Ocorreu um erro, tente novamente ou contate o TI")
+                        }
+                    })
+            }
+
+            
         }
     }
 

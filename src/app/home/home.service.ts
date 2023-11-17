@@ -110,7 +110,7 @@ export class HomeService {
         )
     }
 
-    public getAllEventsByDay(year: number, month: string, day: string) {
+    public getAllEventsByDayAdmin(year: number, month: string, day: string) {
         return this.http.get<Array<CompleteEventData>>(`${environment.API}/agendamentos/${year}-${month}-${day}`, {
             headers: this.authService.defaultHeaders
         }).pipe(
@@ -135,6 +135,38 @@ export class HomeService {
                 return []
             }),
             catchError(error => {
+                console.log("ta caindo aqui hein manin")
+                return throwError(() => error)
+            })
+        )
+    }
+
+    public getAllEventsByDay(year: number, month: string, day: string) {
+        return this.http.get<Array<CompleteEventData>>(`${environment.API}/agendamentos/usuario/${year}-${month}-${day}`, {
+            headers: this.authService.defaultHeaders
+        }).pipe(
+            map((events: CompleteEventData[]) => {
+                if (events) {
+                    return events.map((event: CompleteEventData) => {
+                        let icon = ""
+                        if (event.obs) {
+                            icon = "&#x26A0;&#xFE0F;"
+                        }
+                        if (event.proprietarioid == 1 || event.proprietarioid == 2 || event.proprietarioid == 5) {
+                            console.log(event)
+                        }
+                        return {
+                            title: `${event.logadouro} ${event.numero} ${event.complemento || ""} ${icon}`,
+                            start: this.convertUniversalDate(event.diaAgendamento, event.checkout),
+                            color: this.colorateAll(event.proprietarioid),
+                            meta: event
+                        }
+                    })
+                }
+                return []
+            }),
+            catchError(error => {
+                console.log("ta caindo aqui hein manin")
                 return throwError(() => error)
             })
         )
