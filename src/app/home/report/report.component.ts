@@ -80,10 +80,16 @@ export class ReportComponent implements OnInit {
       const user = this.clients.find((user) => {
         return user.nome === nome;
       });
+      // console.log(nome) // "Todos os clientes"
+      // console.log(user) // {"ïd", "nome"}
       const date = moment(this.date.value).format("YYYY-MM")
 
       if (user) {
-        this.getClientValues(user.id, date)
+        if (nome === "Todos os Clientes") {
+          this.getAllClientValues(date)
+        } else {
+          this.getClientValues(user.id, date)
+        }
       } else {
         console.log(`User with nome '${nome}' not found.`);
       }
@@ -98,6 +104,10 @@ export class ReportComponent implements OnInit {
       next: (response: object) => {
         const res = response as ReportUserData[]
         this.clients = res;
+        this.clients.unshift({
+          "id": 100,
+          "nome": "Todos os Clientes"
+        });
       },
       error: (error) => {
         console.log("Erro ao recuperar os clientes para o relatório: ", error);
@@ -120,6 +130,33 @@ export class ReportComponent implements OnInit {
             console.log("Erro ao recuperar os valores para o relatório: ", error)
         }
     })
+  }
+
+  private getAllClientValues(date: string) {
+    for (const client of this.clients) {
+      const userId = client.id
+
+      this.homeService.getClientValues(userId, date).subscribe({
+          next: (response: object) => {
+            const res = response as ReportClientData[]
+
+            if(res) {
+              this.clientsValues.push(...res)
+            }
+
+          },
+          error: (error) => {
+              console.log("Erro ao recuperar os valores para o relatório: ", error)
+          }
+      })
+    }
+    setTimeout(() => {
+      if (this.clientsValues && this.clientsValues.length !== 0 ) {
+        this.dialogService.openValuesDialog(this.clientsValues)
+      } else {
+          this.snack.openErrorSnack("Não foram encontrados valores para o período selecionado")
+      }
+    }, 1000)
   }
   
   private getClientData() {

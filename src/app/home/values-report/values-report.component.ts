@@ -23,6 +23,7 @@ export class ValuesReportComponent implements OnInit {
     total = 0
     totalFirstQ = 0
     totalLastQ = 0
+    mudou = false
     
     constructor(
         public auth: AuthService,
@@ -32,6 +33,7 @@ export class ValuesReportComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        console.log(this.data)
         this.formatDate()
         this.configInfos()
         this.formatInfos()
@@ -47,9 +49,16 @@ export class ValuesReportComponent implements OnInit {
 
     private configInfos() {
         this.data.forEach((element: ReportClientData) => {
+            if (this.clientName != "" && (this.clientName != element.nome)) {
+                this.mudou = true
+            }
             this.clientName = element.nome
             this.getQuarter(element.diaAgendamento,parseFloat(element.valor))
         });
+
+        if (this.mudou) {
+            this.clientName = "Todos os Clientes"
+        }
     }
 
     private formatInfos() {
