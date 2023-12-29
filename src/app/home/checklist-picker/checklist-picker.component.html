@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Checklist</h1>
+<main mat-dialog-content>
+    <form [formGroup]="reportForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Período</mat-label>
+            <input 
+            matInput 
+            [matDatepicker]="dp"
+            [formControl]="date"
+            readonly
+            >
+            <mat-datepicker-toggle matIconSuffix [for]="dp">
+                
+            </mat-datepicker-toggle>
+            <mat-datepicker 
+            #dp
+            >
+            </mat-datepicker>
+        </mat-form-field>
+    </form>
+</main>
+<footer mat-dialog-actions class="actions">
+    <button mat-raised-button color="primary" (click)="onGerarChecklist()">
+        <mat-icon>
+            save
+        </mat-icon>
+            &nbsp;Gerar Checklist
+    </button>
+    <button mat-raised-button (click)="dialogService.closeChecklistPickerDialog()">
+        <mat-icon>
+            reply
+        </mat-icon>
+            &nbsp;Voltar
+    </button>
+</footer>

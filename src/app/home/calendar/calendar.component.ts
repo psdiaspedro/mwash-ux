@@ -238,8 +238,13 @@ export class CalendarComponent implements OnInit {
         this.dialogService.openSchedulerDialog(this.viewDate)
     }
 
+    // public onCheckList() {
+    //     this.checkCurrentMonth()
+    //     this.dialogService.openCheckListDialog(this.tomorrowEvents)
+    // }
+
     public onCheckList() {
         this.checkCurrentMonth()
-        this.dialogService.openCheckListDialog(this.tomorrowEvents)
+        this.dialogService.openCheckListPickerDialog(this.tomorrowEvents)
     }
 }   

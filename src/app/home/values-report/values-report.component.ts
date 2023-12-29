@@ -33,7 +33,6 @@ export class ValuesReportComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        console.log(this.data)
         this.formatDate()
         this.configInfos()
         this.formatInfos()

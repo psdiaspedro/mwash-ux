@@ -80,8 +80,6 @@ export class ReportComponent implements OnInit {
       const user = this.clients.find((user) => {
         return user.nome === nome;
       });
-      // console.log(nome) // "Todos os clientes"
-      // console.log(user) // {"ïd", "nome"}
       const date = moment(this.date.value).format("YYYY-MM")
 
       if (user) {

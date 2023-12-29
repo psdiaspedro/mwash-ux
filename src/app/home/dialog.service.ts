@@ -10,6 +10,7 @@ import { CompleteEventData } from 'src/interfaces/complete-event-data';
 import { ReportClientData } from 'src/interfaces/client-report';
 import { CalendarEvent } from 'angular-calendar';
 import { ChecklistComponent } from './checklist/checklist.component';
+import { ChecklistPickerComponent } from './checklist-picker/checklist-picker.component';
 
 @Injectable({
     providedIn: 'root'
@@ -23,6 +24,7 @@ export class DialogService {
     private reportDialogRef?:  MatDialogRef<ReportComponent>
     private valuesDialogRef?: MatDialogRef<ValuesReportComponent>
     private checklistDialogRef?: MatDialogRef<ChecklistComponent>
+    private checklistPickerDialogRef?: MatDialogRef<ChecklistPickerComponent>
 
 
     constructor(
@@ -59,6 +61,10 @@ export class DialogService {
         this.checklistDialogRef.updateSize('500px', '')
     }
 
+    public openCheckListPickerDialog(data?: CalendarEvent[]) {
+        this.checklistPickerDialogRef = this.dialog.open(ChecklistPickerComponent, { data })
+    }
+
     public closeSchedulingDialog() {
         this.schedulinDialogRef?.close()
     }
@@ -86,4 +92,9 @@ export class DialogService {
     public closeChecklistDialog() {
         this.checklistDialogRef?.close()
     }
+
+    public closeChecklistPickerDialog() {
+        this.checklistPickerDialogRef?.close()
+    }
+
 }

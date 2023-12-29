@@ -11,6 +11,8 @@ import { ClipboardService } from 'ngx-clipboard';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 
+moment.locale("pt-br")
+
 @Component({
   selector: 'app-checklist',
   templateUrl: './checklist.component.html',
@@ -28,8 +30,10 @@ export class ChecklistComponent implements OnInit{
         @Inject(MAT_DIALOG_DATA) public data: CalendarEvent[]
     ) { }
 
-    ngOnInit() {
-        this.formatDate()
+    
+
+    ngOnInit() {   
+        this.getDateInfos()
         this.groupByClient()
         this.buildStringCopy()
     }
@@ -37,8 +41,14 @@ export class ChecklistComponent implements OnInit{
     public groupedByClient: { [cliente: string]: { [checkout: string]: CalendarEvent[] } } = {};
     public tomorrow = ""
     public total = 0
-    public text = "QUE LOUCURA"
     public contentToCopy:string = ""
+
+
+    public month: any
+    public day: any
+    public year: any
+    public week: any
+
 
     private groupByClient() {
         this.data.forEach((item) => {
@@ -57,14 +67,17 @@ export class ChecklistComponent implements OnInit{
         })
     }
 
-    private formatDate() {
-        const date = moment().add(1, 'day').locale("pt-br")
-        const month = date.format("MM")
-        const day =  date.format('DD');
-        const year = date.format("YY")
-        const week = date.format("dddd")
-        const formattedWeekday = week.charAt(0).toUpperCase() + week.slice(1);
-        this.tomorrow = `${day}/${month} - ${formattedWeekday}`
+    private getDateInfos() {
+        const events = this.data
+
+        if (events[0].start) {
+            const eventDate = moment(events[0].start)
+
+            this.year = eventDate.year().toString()
+            this.month =  (eventDate.month() + 1).toString().padStart(2, '0')
+            this.day = eventDate.date().toString().padStart(2, '0')
+            this.week = eventDate.format('dddd').toString()
+        }
     }
 
     formatedCheckout(checkout: string): string {
@@ -87,7 +100,7 @@ export class ChecklistComponent implements OnInit{
 
     buildStringCopy() {
         let total = 0
-        this.contentToCopy += `*Programação: ${this.tomorrow}*\n\n`
+        this.contentToCopy += `*Programação: ${this.day}/${this.month} - ${this.week}*\n\n`
         for (const clienteKey in this.groupedByClient) {
             if (this.groupedByClient.hasOwnProperty(clienteKey)) {
                 this.contentToCopy += `*${clienteKey}*\n`

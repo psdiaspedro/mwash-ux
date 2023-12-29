@@ -21,6 +21,7 @@ import { ReportComponent } from './report/report.component';
 import { ValuesReportComponent } from './values-report/values-report.component';
 import { ChecklistComponent } from './checklist/checklist.component';
 import {ClipboardModule} from "ngx-clipboard"
+import { ChecklistPickerComponent } from './checklist-picker/checklist-picker.component';
 
 export function momentAdapterFactory() {
     return adapterFactory(moment);
@@ -37,7 +38,8 @@ export function momentAdapterFactory() {
         ReportComponent,
         ValuesReportComponent,
         HomeComponent,
-        ChecklistComponent
+        ChecklistComponent,
+        ChecklistPickerComponent
     ],
     imports: [
         CommonModule,
