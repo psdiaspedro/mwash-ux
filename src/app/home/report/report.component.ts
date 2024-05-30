@@ -84,6 +84,7 @@ export class ReportComponent implements OnInit {
 
       if (user) {
         if (nome === "Todos os Clientes") {
+          this.clientsValues = []
           this.getAllClientValues(date)
         } else {
           this.getClientValues(user.id, date)
@@ -131,6 +132,7 @@ export class ReportComponent implements OnInit {
   }
 
   private getAllClientValues(date: string) {
+    this.clientsValues = []
     for (const client of this.clients) {
       const userId = client.id
 
