@@ -54,6 +54,24 @@
             {{totalLastQ | currency: "BRL"}}
         </div>
     </div>
+    <div class="container-report total total-f">
+        <div class="container-report total-cell">Limpezas - Mês</div>
+        <div class="container-report total-cell">
+          {{ totalLimpezaMes }}
+        </div>
+      </div>
+      <div class="container-report total">
+        <div class="container-report total-cell">Limpezas - 1º Quinzena</div>
+        <div class="container-report total-cell">
+          {{ totalLimpezaPrimeiroQ }}
+        </div>
+      </div>
+      <div class="container-report total">
+        <div class="container-report total-cell">Limpezas - 2º Quinzena</div>
+        <div class="container-report total-cell">
+          {{ totalLimpezaSegundoQ }}
+        </div>
+      </div>
 </main>
 <footer mat-dialog-actions class="actions">
     <button mat-raised-button color="primary" (click)="generatePDF()">

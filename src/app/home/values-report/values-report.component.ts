@@ -24,6 +24,9 @@ export class ValuesReportComponent implements OnInit {
     totalFirstQ = 0
     totalLastQ = 0
     mudou = false
+    totalLimpezaMes = 0;
+    totalLimpezaPrimeiroQ = 0;
+    totalLimpezaSegundoQ = 0;
     
     constructor(
         public auth: AuthService,
@@ -73,10 +76,13 @@ export class ValuesReportComponent implements OnInit {
         const convertedDay = this.convertDate(day)
         if (convertedDay.getDate() <= 15) {
             this.totalFirstQ += value
+            this.totalLimpezaPrimeiroQ++;
         } else {
             this.totalLastQ += value
+            this.totalLimpezaSegundoQ++;
         }
         this.total += value
+        this.totalLimpezaMes++;
     }
     
     private convertDate(day: string) {
