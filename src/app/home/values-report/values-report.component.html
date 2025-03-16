@@ -1,95 +1,77 @@
-<h1 mat-dialog-title>
-    {{clientName}} - {{date}}
-</h1>
+<h1 mat-dialog-title>{{ clientName }} - {{ date }}</h1>
 <main mat-dialog-content>
-    <div class="header">
-        <div class="container-report header-cell">
-            Data
-        </div>
-        <div class="container-report header-cell">
-            Propriedade
-        </div>
-        <div class="container-report header-cell">
-            Complemento
-        </div>
-        <div class="container-report header-cell">
-            Valor
-        </div>
+  <div class="header">
+    <div class="container-report header-cell">Data</div>
+    <div class="container-report header-cell">Propriedade</div>
+    <div class="container-report header-cell">Complemento</div>
+    <div class="container-report header-cell">Valor</div>
+  </div>
+  <div class="container-report" *ngFor="let event of eventsDay">
+    <div class="container-report cell">
+      {{ event.diaAgendamento }}
     </div>
-    <div class="container-report" *ngFor="let event of eventsDay">
-        <div class="container-report cell">
-            {{event.diaAgendamento}}
-        </div>
-        <div class="container-report cell">
-            {{event.logadouro}}
-        </div>
-        <div class="container-report cell">
-            {{event.complemento}}
-        </div>
-        <div class="container-report cell">
-            {{event.valor | currency: "BRL"}}
-        </div>
+    <div class="container-report cell">
+      {{ event.logadouro }}
     </div>
-    <div class="container-report total total-f">
-        <div class="container-report total-cell">
-            Total
-        </div>
-        <div class="container-report total-cell">
-            {{total | currency: "BRL"}}
-        </div>
+    <div class="container-report cell">
+      {{ event.complemento }}
     </div>
-    <div class="container-report total">
-        <div class="container-report total-cell">
-            1º Quinzena
-        </div>
-        <div class="container-report total-cell">
-            {{totalFirstQ | currency: "BRL"}}
-        </div>
+    <div class="container-report cell">
+      {{ event.valor | currency : "BRL" }}
     </div>
-    <div class="container-report total">
-        <div class="container-report total-cell">
-            2º Quinzena
-        </div>
-        <div class="container-report total-cell">
-            {{totalLastQ | currency: "BRL"}}
-        </div>
+  </div>
+  <div class="container-report total total-f">
+    <div class="container-report total-cell">Total</div>
+    <div class="container-report total-cell">
+      {{ total | currency : "BRL" }}
     </div>
-    <div class="container-report total total-f">
-        <div class="container-report total-cell">Limpezas - Mês</div>
-        <div class="container-report total-cell">
-          {{ totalLimpezaMes }}
-        </div>
-      </div>
-      <div class="container-report total">
-        <div class="container-report total-cell">Limpezas - 1º Quinzena</div>
-        <div class="container-report total-cell">
-          {{ totalLimpezaPrimeiroQ }}
-        </div>
-      </div>
-      <div class="container-report total">
-        <div class="container-report total-cell">Limpezas - 2º Quinzena</div>
-        <div class="container-report total-cell">
-          {{ totalLimpezaSegundoQ }}
-        </div>
-      </div>
+  </div>
+  <div class="container-report total">
+    <div class="container-report total-cell">1º Quinzena</div>
+    <div class="container-report total-cell">
+      {{ totalFirstQ | currency : "BRL" }}
+    </div>
+  </div>
+  <div class="container-report total">
+    <div class="container-report total-cell">2º Quinzena</div>
+    <div class="container-report total-cell">
+      {{ totalLastQ | currency : "BRL" }}
+    </div>
+  </div>
+  <div class="container-report total total-f">
+    <div class="container-report total-cell">Limpezas - Mês</div>
+    <div class="container-report total-cell">
+      {{ totalLimpezaMes }}
+    </div>
+  </div>
+  <div class="container-report total">
+    <div class="container-report total-cell">Limpezas - 1º Quinzena</div>
+    <div class="container-report total-cell">
+      {{ totalLimpezaPrimeiroQ }}
+    </div>
+  </div>
+  <div class="container-report total">
+    <div class="container-report total-cell">Limpezas - 2º Quinzena</div>
+    <div class="container-report total-cell">
+      {{ totalLimpezaSegundoQ }}
+    </div>
+  </div>
 </main>
 <footer mat-dialog-actions class="actions">
-    <button mat-raised-button color="primary" (click)="generatePDF()">
-        <mat-icon>
-            print
-        </mat-icon>
-            &nbsp;PDF
-    </button>
-    <button mat-raised-button color="primary" (click)="generateCSV()">
-        <mat-icon>
-            print
-        </mat-icon>
-            &nbsp;Excel
-    </button>
-    <button mat-raised-button (click)="dialogService.closeValuesDialog()">
-        <mat-icon>
-            reply
-        </mat-icon>
-            &nbsp;Voltar
-    </button>
+  <button mat-raised-button color="primary" (click)="generatePDF('1Q')">
+    <mat-icon> print </mat-icon>
+    &nbsp;PDF - 1º Quinzena
+  </button>
+  <button mat-raised-button color="primary" (click)="generatePDF('2Q')">
+    <mat-icon> print </mat-icon>
+    &nbsp;PDF - 2º Quinzena
+  </button>
+  <button mat-raised-button color="primary" (click)="generateCSV()">
+    <mat-icon> print </mat-icon>
+    &nbsp;Excel
+  </button>
+  <button mat-raised-button (click)="dialogService.closeValuesDialog()">
+    <mat-icon> reply </mat-icon>
+    &nbsp;Voltar
+  </button>
 </footer>
